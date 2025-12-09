@@ -105,7 +105,7 @@ def app(input_col):
 
         with st.expander("3. 부동산 자산 (Real Estate)", expanded=True):
             with st.form("prop_form", clear_on_submit=True):
-                r1_c1, r1_c2 = st.columns(2); p_name = r1_c1.text_input("자산명", placeholder="아파트"); p_curr = r1_c2.number_input("현재가(억)", 0, 300, 10)
+                r1_c1, r1_c2 = st.columns(2); p_name = r1_c1.text_input("자산명", placeholder="예:아파트"); p_curr = r1_c2.number_input("현재가(억)", 0, 300, 10)
                 r2_c1, r2_c2 = st.columns(2); p_buy = r2_c1.number_input("매입가(억)", 0, 300, 5); p_loan = r2_c2.number_input("대출금(억)", 0, 200, 0)
                 r3_c1, r3_c2 = st.columns(2); p_strat = r3_c1.radio("계획", ["매각", "상속"]); p_sell = r3_c2.slider("시기(세)", age_curr, 100, 75)
                 st.write(""); b1, b2, b3 = st.columns([1, 2, 1])
@@ -284,4 +284,5 @@ def app(input_col):
         shortfall_txt=f"{ob_norm}세" if ob_norm else "Safe"
 
     )
+
 
