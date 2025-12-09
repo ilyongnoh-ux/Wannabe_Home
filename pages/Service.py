@@ -23,7 +23,7 @@ st.markdown("""
 # ==============================================================================
 # 1. URL에서 '?tool=xxx' 값을 가져옵니다.
 query_params = st.query_params
-target_tool = query_params.get("tool", "golf")  # 없으면 기본값 'golf'
+target_tool = query_params.get("tool", "tax")  # 없으면 기본값 'tax'
 
 # 2. 꼬리표와 셀렉트박스 순서 매핑
 tool_options = ["Wannabe Golf", "Wannabe Tax", "Wannabe Life Plan"]
