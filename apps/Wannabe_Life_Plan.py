@@ -180,7 +180,7 @@ def app(input_col):
     # ==============================================================================
     
     # 4-1. 전문가 심층 분석
-    st.subheader("📝 전문가 심층 분석 (Expert Analysis)")
+    st.subheader("📝 전문가 심층 분석")
     
     with st.expander("1. 현금 흐름 및 자산 수명 (Liquidity & Longevity)", expanded=True):
         if score >= 90:
@@ -282,4 +282,5 @@ def app(input_col):
         score=score, 
         grade=grade, 
         shortfall_txt=f"{ob_norm}세" if ob_norm else "Safe"
+
     )
