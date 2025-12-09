@@ -182,7 +182,7 @@ def app(input_col):
     # 4-1. 전문가 심층 분석
     st.subheader("📝 전문가 심층 분석")
     
-    with st.expander("1. 현금 흐름 및 자산 수명 (Liquidity & Longevity)", expanded=True):
+    with st.expander("1. 현금 흐름 및 자산 수명", expanded=True):
         if score >= 90:
             st.success("✅ **[Excellent] '골든 포트폴리오' 달성: 자산 수명 > 기대 수명**")
             st.markdown("""
@@ -215,7 +215,7 @@ def app(input_col):
                 * **제2의 소득:** 재취업이나 창업을 통해 근로 소득 기간을 최소 5년 이상 연장해야 합니다.
             """)
 
-    with st.expander("2. 부동산 리스크 및 상속 세무 (Real Estate & Tax)", expanded=True):
+    with st.expander("2. 부동산 리스크 및 상속 세무", expanded=True):
         inherit_props = [p for p in st.session_state.properties if "상속" in p['strategy']]
         if inherit_props:
             inherit_val = sum([p['current_val'] for p in inherit_props])
@@ -250,7 +250,7 @@ def app(input_col):
             st.success(f"**💵 풍부한 유동성 (비중 {ratio*100:.0f}%)**")
             st.write("금융 자산 비중이 높아 유연한 대처가 가능합니다. 다만, 현금 보유 성향이 강할 경우 인플레이션 헤지가 부족할 수 있으니 **실물 자산(원자재, 금, 리츠)** 편입을 고려하십시오.")
 
-    with st.expander("3. 변동성 관리 및 투자 전략 (Volatility Management)", expanded=True):
+    with st.expander("3. 변동성 관리 및 투자 전략", expanded=True):
         if return_rate_int < 3:
             st.markdown("**🛡️ 보수적 운용 (Low Risk)**")
             st.write("원금 보존에 중점을 두고 계십니다. 하지만 **'실질 구매력'**을 지키기 위해서는 물가상승률 + 1~2% 수준의 수익이 필요합니다. 채권형 펀드나 고배당주 ETF를 포트폴리오에 일부 편입하는 것을 권장합니다.")
@@ -284,3 +284,4 @@ def app(input_col):
         shortfall_txt=f"{ob_norm}세" if ob_norm else "Safe"
 
     )
+
