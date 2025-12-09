@@ -21,6 +21,18 @@ st.markdown(
 st.markdown(
     """
     <style>
+    /* ✅ 전체 배경을 항상 흰색으로 고정 (다크모드에서도) */
+    .stApp {
+        background-color: #ffffff !important;
+        background-image: none !important;
+        color: #111827 !important;
+    }
+
+    /* 기본 텍스트 색을 어두운 색으로 강제 (다크모드 대비) */
+    html, body, [data-testid="stMarkdownContainer"] {
+        color: #111827 !important;
+    }
+
     /* 네비게이션 스타일 */
     [data-testid="stPageLink-NavLink"] {
         background-color: transparent !important;
@@ -43,14 +55,6 @@ st.markdown(
         transition: all 0.2s ease-in-out;
     }
 
-    /* 전체 배경 이미지 (pages/bg.jpg 파일 사용) */
-    .stApp {
-        background-image: url("pages/bg.jpg");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }
-
     /* CEO 섹션 카드 스타일 */
     .ceo-card {
         background: linear-gradient(135deg, #ffffff 0%, #f9fafb 55%, #eff6ff 100%);
@@ -63,14 +67,12 @@ st.markdown(
     .ceo-name {
         font-weight: 700;
         font-size: 1rem;
-        margin-top: 0.75rem;
+        margin-top: 0.5rem;
         color: #111827;
-        text-align: center;
     }
     .ceo-title {
         font-size: 0.85rem;
         color: #6B7280;
-        text-align: center;
     }
 
     /* Mission 영역 스타일 */
@@ -117,11 +119,6 @@ st.markdown(
 )
 st.markdown("---")
 
-# =======================
-# CEO 섹션 (카드 + 사진/텍스트)
-# =======================
-#st.markdown('<div class="ceo-card">', unsafe_allow_html=True)
-
 c1, c2 = st.columns([1, 2])
 
 with c1:
@@ -133,8 +130,16 @@ with c1:
             caption=None,
             width=220,
         )
-        st.markdown('<div class="ceo-name">노일용 대표</div>', unsafe_allow_html=True)
-        st.markdown('<div class="ceo-title">한국금융투자기술</div>', unsafe_allow_html=True)
+        # ✅ 이름 + 회사명을 하나의 블록으로 묶어서 정중앙 배치
+        st.markdown(
+            """
+            <div style="text-align: center; margin-top: 0.5rem;">
+                <div class="ceo-name">노일용 대표</div>
+                <div class="ceo-title">한국금융투자기술</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
 with c2:
     st.markdown("### CEO Message")
