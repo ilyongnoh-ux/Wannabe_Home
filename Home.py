@@ -73,7 +73,6 @@ st.markdown(
         ">
             Bridge the Gap
         </h1>
-
         <h3 style="
             color: #eee;
             font-size: 2.4rem;
@@ -98,5 +97,6 @@ st.markdown(
 
 # 항상 맨 마지막에 호출
 show_footer()
+
 
 
