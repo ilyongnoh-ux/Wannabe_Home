@@ -60,7 +60,7 @@ def show_footer():
         }
         </style>
         <div class="kfit-footer">
-            Korea Financial Investment Technology(KFIT)®</b> | 문의: 010-6255-9978 <br> Copyright © 2025 WannabeDream® Solution. All rights reserved.
+            Korea Financial Investment Technology(KFIT)®</b> | 010-6255-9978 <br> Copyright © 2025 WannabeDream® Solution. All rights reserved.
         </div>
         """,
         unsafe_allow_html=True,
@@ -118,6 +118,7 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
                 except Exception as e:
 
                     st.error(f"데이터 처리 중 오류 발생: {str(e)}")
+
 
 
 
