@@ -88,7 +88,7 @@ def app(input_col):
     # --------------------------------------------------------------------------
     # [UI] 메인 결과 화면 (오른쪽 프레임)
     # --------------------------------------------------------------------------
-    responsive_text("⛳ 나의 골프 수명 배터리", type="title")
+    responsive_text("⛳ Golf Life Checkup", type="title")
     st.markdown("<div style='text-align: center; opacity: 0.7; font-size: 1.0em; margin-bottom: 25px;'>👇 좌측 메뉴의 값을 조정하여 미래를 확인하세요</div>", unsafe_allow_html=True)
     st.divider()
 
@@ -143,4 +143,5 @@ def app(input_col):
         cost=cost,
         bankruptcy_age=bankruptcy_age,
         result_msg=result_msg
+
     )
