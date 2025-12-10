@@ -112,11 +112,11 @@ with col_nav2:
 st.divider()
 
 # 페이지 타이틀
-st.markdown(
-    '<div style="text-align: center; font-size: 2rem; font-weight: 700; '
-    'color: #1E3A8A; margin-bottom: 0.5rem;">Company Introduction</div>',
-    unsafe_allow_html=True,
-)
+#st.markdown(
+#    '<div style="text-align: center; font-size: 2rem; font-weight: 700; '
+#    'color: #1E3A8A; margin-bottom: 0.5rem;">Company Introduction</div>',
+#    unsafe_allow_html=True,
+#)
 st.markdown("---")
 
 # =======================
@@ -206,3 +206,4 @@ st.markdown(
 )
 
 show_footer()
+
