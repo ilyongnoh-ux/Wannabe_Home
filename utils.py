@@ -78,7 +78,7 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
     :param simulation_data: 각 앱에서 계산된 결과값들 (딕셔너리 형태로 전달)
     """
     st.divider()
-    st.markdown("### 📞 Premium 상담 신청")
+    st.markdown("### 📞 맞춤 컨설팅 신청")
     st.caption("신청하시면 상세 리포트와 전문가 피드백을 받아보실 수 있습니다.")
 
     with st.form(f"{app_type}_common_form"):
@@ -118,6 +118,7 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
                 except Exception as e:
 
                     st.error(f"데이터 처리 중 오류 발생: {str(e)}")
+
 
 
 
