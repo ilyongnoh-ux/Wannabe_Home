@@ -15,7 +15,7 @@ def app(input_col):
             style = "font-size: clamp(24px, 9vw, 50px); font-weight: 800; margin-bottom: 15px; white-space: nowrap; line-height: 1.2;"
             div_style = "margin-bottom: 10px;"
         elif type == "result_unified":
-            style = "font-size: clamp(26px, 8.5vw, 60px); font-weight: 900; line-height: 1.3; letter-spacing: -1px;" 
+            style = "font-size: clamp(20px, 6vw, 40px); font-weight: 900; line-height: 1.3; letter-spacing: -1px;" 
             div_style = "margin: 5px 0;"
         elif type == "subheader_one_line":
             style = "font-size: clamp(18px, 6.5vw, 35px); font-weight: 700; white-space: nowrap;"
