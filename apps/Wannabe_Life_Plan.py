@@ -92,7 +92,7 @@ def app(input_col):
         #st.markdown("""<div class="sidebar-container"><div class="sidebar-title">⛳ Wannabe Life</div><div class="sidebar-subtitle">Professional Asset Simulator</div></div>""", unsafe_allow_html=True)
         st.markdown("""
             <div class="sidebar-container">
-                <div class="responsive-sidebar-title">🧮 Client Info</div>
+                <div class="sidebar-title">🧮 Client Info</div>
             </div>
         """, unsafe_allow_html=True) 
         with st.expander("1. 기본 정보 (Profile)", expanded=True):
@@ -288,6 +288,7 @@ def app(input_col):
         shortfall_txt=f"{ob_norm}세" if ob_norm else "Safe"
 
     )
+
 
 
 
