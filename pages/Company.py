@@ -143,6 +143,9 @@ with c1:
         #)
 
 with c2:
+    # 내부 3컬럼으로 가운데 정렬
+    left, center, right = st.columns([1, 2, 1])
+    with center:
     st.markdown("### CEO Message")
     st.markdown(
         """
@@ -200,5 +203,6 @@ st.markdown(
 
 show_footer()
  
+
 
 
