@@ -1,3 +1,4 @@
+
 import streamlit as st
 from utils import show_footer, hide_header
 
@@ -112,47 +113,39 @@ with col_nav2:
 st.divider()
 
 # 페이지 타이틀
-#st.markdown(
-#    '<div style="text-align: center; font-size: 2rem; font-weight: 700; '
-#    'color: #1E3A8A; margin-bottom: 0.5rem;">Company Introduction</div>',
-#    unsafe_allow_html=True,
-#)
+st.markdown(
+    '<div style="text-align: center; font-size: 2rem; font-weight: 700; '
+    'color: #1E3A8A; margin-bottom: 0.5rem;">Company Introduction</div>',
+    unsafe_allow_html=True,
+)
 st.markdown("---")
 
-# =======================
-# CEO 섹션 (가운데 정렬)
-# =======================
+c1, c2 = st.columns([1, 2])
 
-# 바깥에 여백 컬럼 두고, 가운데에만 카드 배치
-outer_left, outer_center, outer_right = st.columns([1, 6, 1])
-
-with outer_center:
-    st.markdown('<div class="ceo-card">', unsafe_allow_html=True)
-
-    c1, c2 = st.columns([1, 2])
-
-    # 왼쪽: 사진 + 이름/회사 (세로 가운데 정렬 느낌)
-    with c1:
-        st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
+with c1:
+    # 내부 3컬럼으로 가운데 정렬
+    left, center, right = st.columns([1, 2, 1])
+    with center:
         st.image(
             "pages/ceo.jpg",  # 대표 사진 파일 경로
             caption=None,
             width=220,
         )
-        st.markdown(
-            """
-            <div class="ceo-name">노일용 대표</div>
-            <div class="ceo-title">한국금융투자기술</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        # ✅ 이름 + 회사명을 하나의 블록으로 묶어서 정중앙 배치
+        #st.markdown(
+        #    """
+        #    <div style="text-align: center; margin-top: 0.5rem;">
+        #        <div class="ceo-name">노일용 대표</div>
+        #        <div class="ceo-title">한국금융투자기술</div>
+        #    </div>
+        #    """,
+        #    unsafe_allow_html=True,
+        #)
 
-    # 오른쪽: 텍스트 블록 (기존 단락 구조 그대로 유지)
-    with c2:
-        st.markdown("### CEO Message")
-        st.markdown(
-            """
+with c2:
+    st.markdown("### CEO Message")
+    st.markdown(
+        """
 > "금융은 어렵지 않아야 합니다. 기술은 사람을 향해야 합니다."
 
 안녕하세요,  
@@ -181,11 +174,11 @@ with outer_center:
 
 한 번의 계약으로 끝나는 관계가 아니라,  
 <b>오래 맡길 수 있는 ‘나만의 금융 담당자’</b>가 되는 것을 목표로 합니다. 
-            """,
-            unsafe_allow_html=True,
-        )
+        """,
+        unsafe_allow_html=True,
+    )
 
-    st.markdown("</div>", unsafe_allow_html=True)  # ceo-card 닫기
+st.markdown("</div>", unsafe_allow_html=True)  # ceo-card 닫기
 
 # =======================
 # Mission 영역 (하단 중앙 크게)
@@ -206,4 +199,4 @@ st.markdown(
 )
 
 show_footer()
-
+ 
