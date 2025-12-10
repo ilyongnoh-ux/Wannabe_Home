@@ -80,7 +80,7 @@ def app(input_col):
     with input_col:
         st.markdown("""
             <div class="sidebar-container">
-                <div class="responsive-sidebar-title">🧮 Control Panel</div>
+                <div class="responsive-sidebar-title">🧮 Client Info</div>
             </div>
         """, unsafe_allow_html=True)
         st.markdown("---")
@@ -183,7 +183,7 @@ def app(input_col):
     # ==========================================
     st.markdown("""
         <div class="title-container">
-            <div class="responsive-title">⛳ Wannabe Tax Simulation</div>
+            <div class="responsive-title">⛳ Inheritance Tax Simulation</div>
         </div>
     """, unsafe_allow_html=True)
     st.markdown("---")
@@ -366,4 +366,5 @@ def app(input_col):
         sim_years=sim_years,
         inflation_re_pct=inflation_real_estate * 100,
         inflation_fin_pct=inflation_financial * 100
+
     )
