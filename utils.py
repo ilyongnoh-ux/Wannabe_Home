@@ -41,26 +41,47 @@ def hide_sidebar():
     st.markdown("""<style>[data-testid="stSidebar"] {display: none;} [data-testid="stSidebarCollapsedControl"] {display: none;}</style>""", unsafe_allow_html=True)
 
 def show_footer():
-    '''공통 풋터'''
-    #st.markdown("""<div style='margin-top: 80px; padding: 30px; border-top: 1px solid #eee; text-align: center; color: #888; font-size: 0.9rem; background-color: #f9f9f9;'><b>Korea Financial Investment Technology(KFIT)®</b> | 문의: 010-6255-9978 <br> Copyright © 2025 WannabeDream® Solution. All rights reserved.</div>""", unsafe_allow_html=True)
     st.markdown(
         """
         <style>
+        /* 공통 footer 스타일 */
         .kfit-footer {
-            position: fixed;
-            left: 0;
-            bottom: 0;
             width: 100%;
             text-align: center;
-            padding: 8px 0;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.85);
-            background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0));
-            z-index: 999;
+            padding: 10px 8px 18px;
+            margin-top: 1.5rem;
+            color: #4b5563;
+            font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-size: 0.95rem;
+        }
+
+        /* 각 단락(문장)을 span으로 쪼개서 관리 */
+        .kfit-footer-line {
+            display: inline-block;
+            margin: 0 6px;
+            white-space: nowrap;  /* 데스크탑에서는 한 줄 유지 */
+        }
+
+        /* 🔽 모바일(좁은 화면)일 때 전용 설정 */
+        @media (max-width: 768px) {
+            .kfit-footer {
+                /* 화면 너비에 따라 자동으로 줄어드는 글씨 크기 */
+                font-size: clamp(11px, 3.2vw, 14px);
+                line-height: 1.4;
+            }
+
+            .kfit-footer-line {
+                display: block;        /* 단락마다 한 줄씩 */
+                margin: 2px 0;
+                white-space: normal;   /* 줄 안에서 자동 줄바꿈 허용 */
+            }
         }
         </style>
+
         <div class="kfit-footer">
-            Korea Financial Investment Technology(KFIT)®</b> | 문의: 010-6255-9978 <br> Copyright © 2025 WannabeDream® Solution. All rights reserved.
+            <span class="kfit-footer-line">© 2024 한국금융투자기술</span>
+            <span class="kfit-footer-line">Bridge the Gap between possibility and reality</span>
+            <span class="kfit-footer-line">Your Lifetime Financial Partner</span>
         </div>
         """,
         unsafe_allow_html=True,
@@ -117,3 +138,4 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
                 except Exception as e:
 
                     st.error(f"데이터 처리 중 오류 발생: {str(e)}")
+
