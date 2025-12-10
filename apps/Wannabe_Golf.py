@@ -73,7 +73,7 @@ def app(input_col):
     # [UI] 입력창 배치 (왼쪽 프레임 input_col 로 이동)
     # --------------------------------------------------------------------------
     with input_col:
-        st.subheader("🏌️‍♂️ 라이프스타일")
+        st.subheader("🏌️‍♂️Life Style")
         current_age = st.number_input("현재 나이", value=54, min_value=30, max_value=80)
         retire_age = st.slider("은퇴 예정 나이", 50, 75, 60)
         rounds = st.slider("월 라운딩 횟수 (회)", 0, 10, 4)
@@ -145,3 +145,4 @@ def app(input_col):
         result_msg=result_msg
 
     )
+
