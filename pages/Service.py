@@ -11,12 +11,35 @@ st.markdown("""
     <style>
     [data-testid="stSidebar"] { display: none; }
     [data-testid="stSidebarCollapsedControl"] { display: none; }
-    [data-testid="stPageLink-NavLink"] { border: none !important; background: transparent !important; padding: 0px !important; }
-    [data-testid="stPageLink-NavLink"] p { font-size: 1.3rem; font-weight: 600; color: #444; }
-    [data-testid="stPageLink-NavLink"]:hover p { color: #1E3A8A; font-weight: 900; transform: scale(1.05); transition: all 0.2s; }
+
+    [data-testid="stPageLink-NavLink"] { 
+        border: none !important; 
+        background: transparent !important; 
+        padding: 0px !important; 
+    }
+
+    /* 기본 상태: 약간 작게 + 여유 패딩 + 부드러운 전환 */
+    [data-testid="stPageLink-NavLink"] p { 
+        font-size: 1.2rem;            /* 기본 크기 */
+        font-weight: 600; 
+        color: #444; 
+        padding: 4px 6px;             /* 박스를 조금 크게 */
+        margin: 0; 
+        transition: all 0.15s ease-in-out;  /* 부드럽게 커지도록 */
+    }
+
+    /* 호버 상태: 글자 크기만 키우기 (scale 대신) */
+    [data-testid="stPageLink-NavLink"]:hover p { 
+        color: #1E3A8A; 
+        font-weight: 900; 
+        font-size: 1.3rem;            /* 여기서 살짝만 키움 */
+        /* transform: scale(1.05);  ← 이 줄은 제거 */
+    }
+
     .block-container { padding-top: 1rem !important; }
     </style>
 """, unsafe_allow_html=True)
+
 
 # ==============================================================================
 # [NEW] URL 꼬리표(Query Params) 감지 로직
@@ -70,6 +93,7 @@ with right_col:
         Wannabe_Life_Plan.app(left_col)
 
 show_footer()
+
 
 
 
