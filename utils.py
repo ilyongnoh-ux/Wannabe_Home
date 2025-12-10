@@ -90,7 +90,7 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
         memo = st.text_area("문의사항 (선택)", placeholder="궁금한 점을 남겨주세요.", height=80)
         agree = st.checkbox("개인정보 수집 및 이용에 동의합니다.")
         
-        submit_btn = st.form_submit_button("🚀 무료 리포트 받기", use_container_width=True)
+        submit_btn = st.form_submit_button("🚀 신청 완료 하기", use_container_width=True)
 
         if submit_btn:
             if not name or not phone:
@@ -118,6 +118,7 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
                 except Exception as e:
 
                     st.error(f"데이터 처리 중 오류 발생: {str(e)}")
+
 
 
 
