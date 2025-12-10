@@ -98,9 +98,9 @@ st.markdown(
         </h3>
         <h3 style="
             color: #ffffff;
-            font-size: 2rem;
+            font-size: 2.1rem;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
-            font-weight: 600;
+            font-weight: 500;
             margin-top: 0;
         ">
             당신의 평생 금융파트너, 한국금융투자기술
@@ -118,5 +118,6 @@ st.markdown(
 
 # 항상 맨 마지막에 호출
 show_footer()
+
 
 
