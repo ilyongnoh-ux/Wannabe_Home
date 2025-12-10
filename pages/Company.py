@@ -134,7 +134,7 @@ with c1:
         # ✅ 이름 + 회사명을 하나의 블록으로 묶어서 정중앙 배치
         st.markdown(
             """
-            <div style="text-align: center; margin-top: 0.5rem;">
+            <div style="text-align: left; margin-top: 0.5rem;">
                 <div class="ceo-name">노일용 대표</div>
                 <div class="ceo-title">한국금융투자기술</div>
             </div>
@@ -200,6 +200,7 @@ st.markdown(
 
 show_footer()
  
+
 
 
 
