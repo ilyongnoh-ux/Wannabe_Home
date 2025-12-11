@@ -105,7 +105,6 @@ def app(input_col):
                 <h3 class="responsive-sidebar-title">🧮 Client Info</h3>
             </div>
         """, unsafe_allow_html=True)
-        st.markdown("---")
         
         # 1. 자산 입력
         st.markdown("### 1️⃣ 현재 자산 (부모님)")
@@ -406,3 +405,4 @@ def app(input_col):
         is_liquidity_crisis="위험(흑자부도)" if liquidity_crisis else "안전", 
         shortage_amount=shortage                            
     )
+
