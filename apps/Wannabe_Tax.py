@@ -26,7 +26,7 @@ def app(input_col):
     .sidebar-container { width: 100%; margin-bottom: 10px; text-align: center; }
     .responsive-sidebar-title {
         font-weight: 800; color: #4CAF50; white-space: nowrap;
-        font-size: clamp(1.2rem, 13cqw, 2.5rem); 
+        font-size: clamp(1.2rem, 13cqw, 2rem); 
         line-height: 1.2;
     }
     .big-number-box {
@@ -83,7 +83,7 @@ def app(input_col):
                 <div class="responsive-sidebar-title">🧮 Client Info</div>
             </div>
         """, unsafe_allow_html=True)
-        st.markdown("---")
+        #st.markdown("---")
         
         # 1. 자산 입력
         st.markdown("### 1️⃣ 현재 자산 (부모님)")
@@ -376,3 +376,4 @@ def app(input_col):
         is_liquidity_crisis="위험(흑자부도)" if liquidity_crisis else "안전", # 유동성 위기 여부
         shortage_amount=shortage                            # 부족한 현금 액수 (원)
     )
+
