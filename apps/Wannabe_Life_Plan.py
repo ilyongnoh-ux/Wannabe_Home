@@ -81,7 +81,7 @@ def app(input_col):
         
         /* Client Info 타이틀도 Primary Color로 통일 */
         .sidebar-title { 
-            font-size: 1.5rem; 
+            font-size: 1.8rem; 
             font-weight: 900; 
             color: var(--primary-color); 
             text-align: center; 
@@ -514,6 +514,7 @@ def app(input_col):
         DataModelClass=LifeData,
         **simulation_data
     )
+
 
 
 
