@@ -111,7 +111,7 @@ def app(input_col):
         # [수정] Life Plan과 통일된 H3 + 클래스 구조 사용
         st.markdown("""
             <div class="sidebar-container">
-                <h3 class="sidebar-title">🏌️‍♂️ Client Info</h3>
+                <h2 class="sidebar-title">🏌️‍♂️ Client Info</h2>
             </div>
         """, unsafe_allow_html=True)
     
@@ -189,3 +189,4 @@ def app(input_col):
         bankruptcy_age=bankruptcy_age,
         result_msg=result_msg
     )
+
