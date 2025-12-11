@@ -18,7 +18,7 @@ def app(input_col):
             font-weight: 900; 
             color: var(--primary-color);
             white-space: nowrap; 
-            text-align: left; 
+            text-align: center; 
             margin-bottom: 20px; 
         }
         .metric-container { 
@@ -514,6 +514,7 @@ def app(input_col):
         DataModelClass=LifeData,
         **simulation_data
     )
+
 
 
 
