@@ -325,7 +325,7 @@ def app(input_col):
         fig.add_annotation(
             x=crisis_year,
             y=crisis_tax_val,
-            text=f"🚨 <b>{crisis_year}년 후 고갈!</b>",
+            text=f"🚨 <b>{crisis_year}년 후 부족!</b>",
             showarrow=True, arrowhead=2, arrowsize=2.0, arrowwidth=2, arrowcolor="#FFFF00",
             ax=0, ay=-40, bgcolor="#EF4444", bordercolor="#FFFF00",
             font=dict(size=15, color="white", family="sans-serif")
@@ -351,7 +351,7 @@ def app(input_col):
     3. **빨간 막대**: 자녀가 낼 세금 (빨간 막대가 파란 선을 넘으면 위험)
     """)
 
-# --------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # [수정됨] 공통 상담 폼 호출 + 진단 결과 데이터 추가 저장
     # --------------------------------------------------------------------------
     render_common_form(
@@ -376,6 +376,7 @@ def app(input_col):
         is_liquidity_crisis="위험(흑자부도)" if liquidity_crisis else "안전", # 유동성 위기 여부
         shortage_amount=shortage                            # 부족한 현금 액수 (원)
     )
+
 
 
 
