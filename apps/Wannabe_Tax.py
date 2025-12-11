@@ -94,7 +94,7 @@ def app(input_col):
         st.markdown("---")
         
         # 2. 가정 설정
-        st.markdown("### 2️⃣ 시뮬레이션 가정")
+        st.markdown("#### 2️⃣ 시뮬레이션 가정")
         has_spouse = st.toggle("배우자 생존 여부", value=True)
         
         if has_spouse:
@@ -110,7 +110,7 @@ def app(input_col):
         st.markdown("---")
         
         # 3. 미래 변수
-        st.markdown("### 3️⃣ 미래 변수 (복리)")
+        st.markdown("#### 3️⃣ 미래 변수 (복리)")
         inflation_real_estate = st.slider("부동산 연 상승률 (%)", 0, 10, 5, step=1) / 100
         inflation_financial = st.slider("금융자산 연 수익률 (%)", 0, 10, 2, step=1) / 100
 
@@ -376,6 +376,7 @@ def app(input_col):
         is_liquidity_crisis="위험(흑자부도)" if liquidity_crisis else "안전", # 유동성 위기 여부
         shortage_amount=shortage                            # 부족한 현금 액수 (원)
     )
+
 
 
 
