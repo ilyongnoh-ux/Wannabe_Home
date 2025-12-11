@@ -21,58 +21,37 @@ def app(input_col):
             text-align: left; 
             margin-bottom: 20px; 
         }
-        /* ... (metric-container, metric-label 등 유지) ... */
+        .metric-container { display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; height: 140px; }
+        .metric-label { font-size: 1.2rem; color: #333333; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; white-space: nowrap; }
+        .metric-value { font-size: 2.2rem; font-weight: 900; color: #000000; line-height: 1; }
+        .val-safe { color: #2E8B57 !important; }
+        .val-warn { color: #FF8C00 !important; }
+        .val-danger { color: #E53935 !important; }
+        .val-blue { color: #1E88E5 !important; }
+        .val-purple { color: #8E24AA !important; }
         
-        /* [수정] 자산 목록 스타일링 (버튼 삽입을 위한 position: relative 추가) */
-        .prop-card-base {
-            padding: 10px; 
-            border-radius: 5px; 
-            margin-bottom: 8px;
-            position: relative; /* 버튼 기준점 */
-            overflow: hidden; /* 버튼이 튀어나오지 않게 */
-        }
-        .prop-card-sell { 
-            background-color: #e8f5e9 !important; 
-            border-left: 5px solid #2e7d32; 
-        }
-        .prop-card-inherit { 
-            background-color: #e3f2fd !important; 
-            border-left: 5px solid #1565c0; 
-        }
+        /* [수정] 자산 목록 스타일링 강제 적용 */
+        .prop-card-sell { background-color: #e8f5e9 !important; border-left: 5px solid #2e7d32; padding: 10px; border-radius: 5px; margin-bottom: 8px; }
+        .prop-card-inherit { background-color: #e3f2fd !important; border-left: 5px solid #1565c0; padding: 10px; border-radius: 5px; margin-bottom: 8px; }
         
-        .prop-card-base div, .prop-title { color: #000000 !important; font-family: sans-serif; }
-        .prop-title { font-weight: bold; font-size: 14px; margin-bottom: 3px; }
+        .prop-card-sell div, .prop-card-inherit div, .prop-title { color: #000000 !important; font-family: sans-serif; }
+        .prop-title { font-weight: bold; font-size: 14px; }
         
-        /* [NEW] 삭제 버튼 스타일 (텍스트 박스 안에 들어간 것처럼 보이게) */
-        .delete-button-container {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            z-index: 10;
-        }
-        /* Streamlit 버튼 스타일 재정의 (버튼을 작게 만들고 배경색 없앰) */
-        .stButton button {
-            background-color: transparent !important;
-            color: #E53935 !important; 
-            border: none !important;
-            box-shadow: none !important;
-            padding: 0 5px !important;
-            height: auto;
-            line-height: 1;
-            font-size: 1.2em;
-            font-weight: bold;
+        /* [추가] 삭제 버튼 줄바꿈 방지 */
+        .st-emotion-cache-1r65j0p { /* Streamlit 컬럼 컨테이너 ID 중 하나 */
+             white-space: nowrap; 
         }
 
         /* [수정] Client Info 타이틀도 Primary Color로 통일 */
         .sidebar-title { font-size: 1.5rem; font-weight: 900; color: var(--primary-color); text-align: center; } 
-        /* ... (나머지 CSS 유지) ... */
+        .sidebar-subtitle { font-size: 12px; color: #666; text-align: center; margin-bottom: 20px; }
         </style>
     """, unsafe_allow_html=True)
 
     if 'properties' not in st.session_state: st.session_state.properties = []
 
     # ==============================================================================
-    # 1. 로직 엔진 (중략)
+    # 1. 로직 엔진
     # ==============================================================================
     class WannabeEngine:
         # ... (로직 엔진 코드 유지) ...
@@ -154,28 +133,28 @@ def app(input_col):
 
         # expanded=True -> expanded=False
         with st.expander("3. 부동산 자산 (Real Estate)", expanded=False): 
-            
+            # [추가] 경고 메시지 출력을 위한 플레이스홀더 (버튼 위에 위치)
+            warning_placeholder = st.empty() 
+
             with st.form("prop_form", clear_on_submit=True):
                 r1_c1, r1_c2 = st.columns(2); p_name = r1_c1.text_input("자산명", placeholder="예:아파트"); p_curr = r1_c2.number_input("현재가(억)", 0, 300, 10)
                 r2_c1, r2_c2 = st.columns(2); p_buy = r2_c1.number_input("매입가(억)", 0, 300, 5); p_loan = r2_c2.number_input("대출금(억)", 0, 200, 0)
                 r3_c1, r3_c2 = st.columns(2); p_strat = r3_c1.radio("계획", ["매각", "상속"]); p_sell = r3_c2.slider("시기(세)", age_curr, 100, 75)
                 st.write(""); b1, b2, b3 = st.columns([1, 2, 1])
                 
-                # 버튼 렌더링
+                # [위치 조정] 버튼 바로 위에 경고 메시지 플레이스홀더가 위치하도록 코드 흐름 조정
                 with b2: btn_submitted = st.form_submit_button("➕ 자산 추가", use_container_width=True)
                 
-                # 버튼 바로 아래에 위치할 플레이스홀더 정의
-                warning_placeholder = st.empty() 
-                
-                # 유효성 검사 및 목록 추가 로직
+                # [수정] 유효성 검사 및 목록 추가 로직
                 if btn_submitted:
                     if not p_name or p_name.strip() == "":
-                        # 버튼 바로 아래에 에러 메시지 출력
+                        # [적용] 버튼 위에 위치한 플레이스홀더에 에러 메시지 출력
                         warning_placeholder.error("⚠️ 자산명칭을 입력해주세요.")
                     else:
                         strat_code = "매각 (Sell)" if "매각" in p_strat else "상속 (Inherit)"
                         st.session_state.properties.append({"name": p_name, "current_val": p_curr, "loan": p_loan, "purchase_price": p_buy, "strategy": strat_code, "sell_age": p_sell, "is_sold": False})
-                        warning_placeholder.empty() # 성공 시 경고 메시지 비우기
+                        # 성공 시 메시지 비우기 (불필요하지만 안전하게)
+                        warning_placeholder.empty()
                         st.rerun()
 
             if st.session_state.properties:
@@ -185,35 +164,16 @@ def app(input_col):
                     css_class = "prop-card-sell" if "매각" in p['strategy'] else "prop-card-inherit"
                     icon = "💰" if "매각" in p['strategy'] else "🎁"; net = p['current_val'] - p['loan']
                     
-                    # [수정] 텍스트 박스 스타일링을 위해 컬럼 제거 (줄바꿈 원인 제거)
-                    # 전체를 마크다운으로 렌더링
+                    # 컬럼 비율을 [9, 1]로 조정하여 삭제 버튼 줄바꿈 방지
+                    col_info, col_del = st.columns([9, 1])
                     
-                    st.markdown(f"""
-                        <div class="prop-card-base {css_class}">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                <div>
-                                    <div class="prop-title">{icon} {p['name']}</div>
-                                    <div>순가치 {net}억 (대출 {p['loan']}억)</div>
-                                    <div>{desc}</div>
-                                </div>
-                                <div class="delete-button-container">
-                                    {st.button("X", key=f"del_{i}")}
-                                </div>
-                            </div>
-                        </div>
-                    """, unsafe_allow_html=True)
-                    # st.markdown(f"""
-                    #     <div class="prop-card-base {css_class}">
-                    #         <div style="padding: 0; margin: 0;">
-                    #             <div class="prop-title">{icon} {p['name']}</div>
-                    #             <div>순가치 {net}억 (대출 {p['loan']}억)</div>
-                    #             <div>{desc}</div>
-                    #         </div>
-                    #         <div class="delete-button-container">
-                    #             {st.button("X", key=f"del_{i}")}
-                    #         </div>
-                    #     </div>
-                    # """, unsafe_allow_html=True)
+                    with col_info: st.markdown(f"""<div class="{css_class}"><div class="prop-title">{icon} {p['name']}</div><div>순가치 {net}억 (대출 {p['loan']}억)</div><div>{desc}</div></div>""", unsafe_allow_html=True)
+                    with col_del: 
+                        st.write(""); 
+                        # [UX 개선] 삭제 버튼의 폭을 최소화하고 줄바꿈 방지
+                        st.markdown('<div style="white-space: nowrap;">', unsafe_allow_html=True)
+                        if st.button("X", key=f"del_{i}"): st.session_state.properties.pop(i); st.rerun()
+                        st.markdown('</div>', unsafe_allow_html=True)
 
         # expanded=True -> expanded=False
         with st.expander("4. 라이프스타일 (Lifestyle)", expanded=False):
@@ -249,7 +209,7 @@ def app(input_col):
     with c3:
         if ob_norm: icon = "🚨"; val_text = f"{ob_norm}세"; color_class = "val-danger"
         else: icon = "⏳"; val_text = "Safe"; color_class = "val-safe"
-        st.markdown(f"""<div class="big-number-box"><div class="big-number-label">{icon} 현금 고갈 시점</div><div class="big-number-value {color_class}">{val_text}</div></div>""", unsafe_allow_html=True)
+        st.markdown(f"""<div class="metric-container"><div class="metric-label">{icon} 현금 고갈 시점</div><div class="metric-value {color_class}">{val_text}</div></div>""", unsafe_allow_html=True)
 
     st.write(""); st.subheader("📈 자산별 생애 궤적")
     
