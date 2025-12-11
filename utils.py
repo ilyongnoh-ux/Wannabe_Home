@@ -85,9 +85,14 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
         # 공통 입력 필드 (2단 배열)
         c1, c2 = st.columns(2)
         name = c1.text_input("성함", placeholder="예: 홍길동")
-        phone = c2.text_input("연락처", placeholder="010-0000-0000")
+        phone = c2.text_input("연락처", placeholder="예: 01062559978")
         
         memo = st.text_area("문의사항 (선택)", placeholder="궁금한 점을 남겨주세요.", height=80)
+        st.markdown("""
+                <div style="font-size: 14px; color: #9CA3AF; margin-bottom: 5px;">
+                🔒 입력하신 정보는 <b>오직 상담 목적으로만 활용</b>되며, 외부로 유출되지 않습니다.
+                </div>
+                """, unsafe_allow_html=True)
         agree = st.checkbox("개인정보 수집 및 이용에 동의합니다.")
         
         submit_btn = st.form_submit_button("🚀 신청 완료 하기", use_container_width=True)
@@ -118,9 +123,3 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
                 except Exception as e:
 
                     st.error(f"데이터 처리 중 오류 발생: {str(e)}")
-
-
-
-
-
-
