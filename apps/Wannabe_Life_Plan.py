@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 from utils import send_data_to_api, render_common_form
 from models import LifeData
+import json 
 
 def app(input_col):
     # ==============================================================================
@@ -11,7 +12,15 @@ def app(input_col):
     # ==============================================================================
     st.markdown("""
         <style>
-        .responsive-title { font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 900; color: var(--text-color); white-space: nowrap; text-align: left; margin-bottom: 20px; }
+        /* [수정] 메인 타이틀 색상을 Primary Color로 강제 통일 (다크모드 대응) */
+        .responsive-title { 
+            font-size: clamp(1.5rem, 5vw, 2.5rem); 
+            font-weight: 900; 
+            color: var(--primary-color); /* Streamlit Primary Color (강조색) 사용 */
+            white-space: nowrap; 
+            text-align: left; 
+            margin-bottom: 20px; 
+        }
         .metric-container { display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; height: 140px; }
         .metric-label { font-size: 1.2rem; color: #333333; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; white-space: nowrap; }
         .metric-value { font-size: 2.2rem; font-weight: 900; color: #000000; line-height: 1; }
@@ -20,11 +29,21 @@ def app(input_col):
         .val-danger { color: #E53935 !important; }
         .val-blue { color: #1E88E5 !important; }
         .val-purple { color: #8E24AA !important; }
+        
+        /* [수정] 자산 목록 스타일링 강제 적용 */
         .prop-card-sell { background-color: #e8f5e9 !important; border-left: 5px solid #2e7d32; padding: 10px; border-radius: 5px; margin-bottom: 8px; }
         .prop-card-inherit { background-color: #e3f2fd !important; border-left: 5px solid #1565c0; padding: 10px; border-radius: 5px; margin-bottom: 8px; }
+        
         .prop-card-sell div, .prop-card-inherit div, .prop-title { color: #000000 !important; font-family: sans-serif; }
         .prop-title { font-weight: bold; font-size: 14px; }
-        .sidebar-title { font-size: 1.5rem; font-weight: 900; color: #2E8B57; text-align: center; }
+        
+        /* [추가] 삭제 버튼 줄바꿈 방지 */
+        .st-emotion-cache-1r65j0p { /* Streamlit 컬럼 컨테이너 ID 중 하나 */
+             white-space: nowrap; 
+        }
+
+        /* [수정] Client Info 타이틀도 Primary Color로 통일 */
+        .sidebar-title { font-size: 1.5rem; font-weight: 900; color: var(--primary-color); text-align: center; } 
         .sidebar-subtitle { font-size: 12px; color: #666; text-align: center; margin-bottom: 20px; }
         </style>
     """, unsafe_allow_html=True)
@@ -35,6 +54,7 @@ def app(input_col):
     # 1. 로직 엔진
     # ==============================================================================
     class WannabeEngine:
+        # ... (로직 엔진 코드 유지) ...
         def __init__(self, current_age, retire_age, death_age):
             self.current_age = current_age
             self.retire_age = retire_age
@@ -89,37 +109,53 @@ def app(input_col):
     # 2. [왼쪽 프레임] 입력 UI
     # ==============================================================================
     with input_col:
-        #st.markdown("""<div class="sidebar-container"><div class="sidebar-title">⛳ Wannabe Life</div><div class="sidebar-subtitle">Professional Asset Simulator</div></div>""", unsafe_allow_html=True)
+        # Client Info 타이틀 (Primary Color)
         st.markdown("""
             <div class="sidebar-container">
-                <div class="sidebar-title">🧮 Client Info</div>
+                <h3 class="sidebar-title">🧮 Client Info</h3> 
             </div>
         """, unsafe_allow_html=True)
         st.write("")
-        with st.expander("1. 기본 정보 (Profile)", expanded=True):
+        
+        # expanded=True -> expanded=False
+        with st.expander("1. 기본 정보 (Profile)", expanded=False): 
             c1, c2 = st.columns(2)
             age_curr = c1.number_input("현재 나이", 30, 80, 50)
             age_retire = c2.number_input("은퇴 목표", 50, 90, 65)
             age_death = st.number_input("기대 수명", 80, 120, 95)
 
-        with st.expander("2. 금융 자산 (Finance)", expanded=True):
+        # expanded=True -> expanded=False
+        with st.expander("2. 금융 자산 (Finance)", expanded=False): 
             c1, c2 = st.columns(2)
             liquid_asset = c1.number_input("유동자산(억)", 0.0, 100.0, 3.0)
             monthly_save = c2.number_input("월 저축(만원)", 0, 10000, 300)
             return_rate_int = st.slider("투자 수익률(%)", 0, 15, 4, step=1); return_rate = return_rate_int / 100
 
-        with st.expander("3. 부동산 자산 (Real Estate)", expanded=True):
+        # expanded=True -> expanded=False
+        with st.expander("3. 부동산 자산 (Real Estate)", expanded=False): 
+            # [추가] 경고 메시지 출력을 위한 플레이스홀더 (버튼 위에 위치)
+            warning_placeholder = st.empty() 
+
             with st.form("prop_form", clear_on_submit=True):
                 r1_c1, r1_c2 = st.columns(2); p_name = r1_c1.text_input("자산명", placeholder="예:아파트"); p_curr = r1_c2.number_input("현재가(억)", 0, 300, 10)
                 r2_c1, r2_c2 = st.columns(2); p_buy = r2_c1.number_input("매입가(억)", 0, 300, 5); p_loan = r2_c2.number_input("대출금(억)", 0, 200, 0)
                 r3_c1, r3_c2 = st.columns(2); p_strat = r3_c1.radio("계획", ["매각", "상속"]); p_sell = r3_c2.slider("시기(세)", age_curr, 100, 75)
                 st.write(""); b1, b2, b3 = st.columns([1, 2, 1])
+                
+                # [위치 조정] 버튼 바로 위에 경고 메시지 플레이스홀더가 위치하도록 코드 흐름 조정
                 with b2: btn_submitted = st.form_submit_button("➕ 자산 추가", use_container_width=True)
                 
+                # [수정] 유효성 검사 및 목록 추가 로직
                 if btn_submitted:
-                    strat_code = "매각 (Sell)" if "매각" in p_strat else "상속 (Inherit)"
-                    st.session_state.properties.append({"name": p_name, "current_val": p_curr, "loan": p_loan, "purchase_price": p_buy, "strategy": strat_code, "sell_age": p_sell, "is_sold": False})
-                    st.rerun()
+                    if not p_name or p_name.strip() == "":
+                        # [적용] 버튼 위에 위치한 플레이스홀더에 에러 메시지 출력
+                        warning_placeholder.error("⚠️ 자산명칭을 입력해주세요.")
+                    else:
+                        strat_code = "매각 (Sell)" if "매각" in p_strat else "상속 (Inherit)"
+                        st.session_state.properties.append({"name": p_name, "current_val": p_curr, "loan": p_loan, "purchase_price": p_buy, "strategy": strat_code, "sell_age": p_sell, "is_sold": False})
+                        # 성공 시 메시지 비우기 (불필요하지만 안전하게)
+                        warning_placeholder.empty()
+                        st.rerun()
 
             if st.session_state.properties:
                 st.markdown("---")
@@ -127,13 +163,20 @@ def app(input_col):
                     desc = f"매각 ({p['sell_age']}세)" if "매각" in p['strategy'] else "상속"
                     css_class = "prop-card-sell" if "매각" in p['strategy'] else "prop-card-inherit"
                     icon = "💰" if "매각" in p['strategy'] else "🎁"; net = p['current_val'] - p['loan']
-                    col_info, col_del = st.columns([8, 2])
+                    
+                    # 컬럼 비율을 [9, 1]로 조정하여 삭제 버튼 줄바꿈 방지
+                    col_info, col_del = st.columns([9, 1])
+                    
                     with col_info: st.markdown(f"""<div class="{css_class}"><div class="prop-title">{icon} {p['name']}</div><div>순가치 {net}억 (대출 {p['loan']}억)</div><div>{desc}</div></div>""", unsafe_allow_html=True)
                     with col_del: 
                         st.write(""); 
+                        # [UX 개선] 삭제 버튼의 폭을 최소화하고 줄바꿈 방지
+                        st.markdown('<div style="white-space: nowrap;">', unsafe_allow_html=True)
                         if st.button("X", key=f"del_{i}"): st.session_state.properties.pop(i); st.rerun()
+                        st.markdown('</div>', unsafe_allow_html=True)
 
-        with st.expander("4. 라이프스타일 (Lifestyle)", expanded=True):
+        # expanded=True -> expanded=False
+        with st.expander("4. 라이프스타일 (Lifestyle)", expanded=False):
             monthly_spend = st.number_input("은퇴 월 생활비(만원)", 0, 5000, 300)
             c1, c2 = st.columns(2)
             golf_freq = c1.selectbox("골프 라운딩", ["안 함", "월 1회", "월 2회", "월 4회", "VIP"]); c1.caption("회당 40만원")
@@ -141,7 +184,7 @@ def app(input_col):
             inflation = st.select_slider("물가상승률", ["안정(2%)", "보통(3.5%)", "심각(5%)"], value="보통(3.5%)")
 
     # ==============================================================================
-    # 3. [오른쪽 프레임] 메인 화면
+    # 3. [오른쪽 프레임] 메인 화면 (중략)
     # ==============================================================================
     golf_map = {"안 함":0, "월 1회":12, "월 2회":24, "월 4회":48, "VIP":100}
     travel_map = {"안 함":0, "연 1회":1, "연 2회":2, "분기별":4}
@@ -210,7 +253,7 @@ def app(input_col):
                 * 확정 금리형 상품보다는, 물가 상승을 방어할 수 있는 **배당 성장주**나 **리츠(REITs)** 등 현금 창출형 실물 자산 비중을 늘리십시오.
             """)
         elif score >= 50:
-            st.warning(f"🚨 **[Warning] 소득 절벽 경고: {ob_norm}세 전후 자산 고갈 위험**")
+            st.warning(f"🚨 **[Warning] 소득 절벽 경고: {ob_norm}세 전후 '소득 절벽'**")
             st.markdown(f"""
             * **진단:** 은퇴 후 {ob_norm}세 시점에 보유 현금이 바닥날 것으로 예측됩니다. 이는 **'장수 리스크(Longevity Risk)'**에 취약한 구조입니다.
             * **제언:** 즉각적인 **구조조정(Restructuring)**이 필요합니다.
@@ -233,7 +276,7 @@ def app(input_col):
             st.error(f"🚨 **[Tax Warning] 부동산 상속 리스크 감지**")
             st.markdown(f"""
             <div style='background-color: #ffebee; padding: 15px; border-radius: 10px; border: 1px solid #ffcdd2;'>
-                <strong style='color: #b71c1c; font-size: 1.1em;'>⚠️ 현재 {inherit_val}억 원 상당의 부동산 상속이 계획되어 있습니다.</strong>
+                <strong style='color: #b71c1c; font-size: 1.1em;'>⚠️ 현재 {inherit_val}억 원 상당의 상속 계획. 상속세 재원(종신보험) 마련이 필수적입니다.</strong>
                 <ul style='margin-top: 10px; color: #333;'>
                     <li>대한민국의 상속세율은 <b>최대 50%</b>(누진세율)에 달합니다.</li>
                     <li>자녀들이 충분한 <b>현금 재원</b>을 준비하지 못한다면, 세금을 납부하기 위해 물려주신 소중한 부동산을 <b>급매(헐값 처분)</b>하거나 <b>물납</b>해야 하는 상황이 발생합니다.</li>
@@ -255,11 +298,11 @@ def app(input_col):
             st.warning(f"**🏠 부동산 과다 보유 (비중 {ratio*100:.0f}%)**")
             st.write("전형적인 **'Asset Rich, Cash Poor'** 유형입니다. 부동산 시장 침체 시 유동성 위기가 발생할 수 있으니, 비중을 60% 이하로 낮추는 전략적 매각이 필요합니다.")
         elif ratio > 0.5:
-            st.info(f"**⚖️ 균형 잡힌 자산 배분 (비중 {ratio*100:.0f}%)**")
-            st.write("부동산과 금융 자산의 균형이 양호합니다. 금융 자산 내에서는 국내뿐만 아니라 **글로벌 자산 배분**을 통해 통화 분산 효과를 누리십시오.")
+            st.info(f"⚖️ **균형 잡힌 자산 배분 (비중 {ratio*100:.0f}%)**")
+            st.write("안정적인 배분입니다. 글로벌 자산 배분을 강화하세요.")
         else:
-            st.success(f"**💵 풍부한 유동성 (비중 {ratio*100:.0f}%)**")
-            st.write("금융 자산 비중이 높아 유연한 대처가 가능합니다. 다만, 현금 보유 성향이 강할 경우 인플레이션 헤지가 부족할 수 있으니 **실물 자산(원자재, 금, 리츠)** 편입을 고려하십시오.")
+            st.success(f"💵 **풍부한 유동성 (비중 {ratio*100:.0f}%)**")
+            st.write("위기에 강하지만 인플레이션에 취약할 수 있습니다.")
 
     with st.expander("3. 변동성 관리 및 투자 전략", expanded=True):
         if return_rate_int < 3:
@@ -273,34 +316,38 @@ def app(input_col):
             st.write("가장 권장되는 운용 방식입니다. 은퇴 시점이 다가올수록 위험 자산 비중을 자동으로 줄여주는 **TDF(Target Date Fund)** 활용이 적합합니다.")
 
     # 4-2. 공통 상담 신청 폼
+    
+    # 1. 누락된 필드에 필요한 데이터 및 임시값 할당
     props_str = ", ".join([p['name'] for p in st.session_state.properties]) if st.session_state.properties else "없음"
     
+    # [NEW] LifeData가 요구하는 20개 필드를 구성 (누락된 3개 필드 포함)
+    re_asset = sum([p['current_val'] for p in st.session_state.properties])
+    props_json = json.dumps(st.session_state.properties, ensure_ascii=False) # <--- JSON ASCII 인코딩 옵션도 유지
+    inflation_label = inflation # "안정(2%)", "보통(3.5%)" 등의 레이블
+
+    simulation_data = {
+        "age": age_curr, 
+        "retire_age": age_retire, 
+        "death_age": age_death,
+        "asset": liquid_asset, 
+        "save": monthly_save, 
+        "rate_pct": return_rate_int, 
+        "props_str": props_str,
+        "spend": monthly_spend, 
+        "golf_freq": golf_freq, 
+        "travel_freq": travel_freq, 
+        "inflation_pct": inf_val * 100, 
+        "score": score, 
+        "grade": grade, 
+        "shortfall_txt": f"{ob_norm}세" if ob_norm else "Safe",
+        # [추가된 3개 필드]
+        "re_asset": re_asset,
+        "props_json": props_json,
+        "inflation_label": inflation_label
+    }
+
     render_common_form(
         app_type="life",
         DataModelClass=LifeData,
-        # [데이터 전달] 모델 필드와 일치시킴
-        age=age_curr, 
-        retire_age=age_retire, 
-        death_age=age_death,
-        asset=liquid_asset, 
-        save=monthly_save, 
-        rate_pct=return_rate_int, 
-        props_str=props_str,
-        spend=monthly_spend, 
-        golf_freq=golf_freq, 
-        travel_freq=travel_freq, 
-        inflation_pct=inf_val * 100, 
-        score=score, 
-        grade=grade, 
-        shortfall_txt=f"{ob_norm}세" if ob_norm else "Safe"
-
+        **simulation_data # 20개 필드를 포함한 딕셔너리 전달
     )
-
-
-
-
-
-
-
-
-
