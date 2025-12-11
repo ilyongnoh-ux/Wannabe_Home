@@ -79,7 +79,7 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
     """
     st.divider()
     st.markdown("### 📞 맞춤 컨설팅 신청")
-    st.caption("신청하시면 상세리포트와 전문가 피드백을 받아보실 수 있습니다.")
+    st.caption("상세 리포트와 전문가 피드백을 받아보실 수 있습니다.")
 
     with st.form(f"{app_type}_common_form"):
         # 공통 입력 필드 (2단 배열)
@@ -123,4 +123,5 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
                 except Exception as e:
 
                     st.error(f"데이터 처리 중 오류 발생: {str(e)}")
+
 
