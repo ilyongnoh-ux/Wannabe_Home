@@ -255,32 +255,26 @@ def app(input_col):
                     css_class = "prop-card-sell" if "매각" in p['strategy'] else "prop-card-inherit"
                     icon = "💰" if "매각" in p['strategy'] else "🎁"
                     net = p['current_val'] - p['loan']
-                    
-                     # ✅ 카드 전체를 하나의 div로 감싸고, 그 안에서 컬럼 + 삭제버튼 배치
-                    st.markdown(f'<div class="{css_class}">', unsafe_allow_html=True)
 
-                    card_col, btn_col = st.columns([8, 2])
-
-                    with card_col:
+                    # ✅ 카드 + 삭제버튼을 한 컨테이너 안에 배치
+                    with st.container():
                         st.markdown(
                             f"""
-                            <div class="prop-title">{icon} {p['name']}</div>
-                            <div>순가치 {net}억 (대출 {p['loan']}억)</div>
-                            <div>{desc}</div>
+                            <div class="{css_class}">
+                                <div class="prop-title">{icon} {p['name']}</div>
+                                <div>순가치 {net}억 (대출 {p['loan']}억)</div>
+                                <div>{desc}</div>
+                            </div>
                             """,
                             unsafe_allow_html=True
                         )
+                        # 카드 바로 아래에 삭제 버튼 배치 → "항목 안"에 있는 느낌
+                        btn_col = st.columns([8, 2])
+                        with btn_col[1]:
+                            if st.button("삭제", key=f"del_{i}"):
+                                st.session_state.properties.pop(i)
+                                st.rerun()
 
-                    with btn_col:
-                        # 버튼을 카드 오른쪽 상단/중앙 쯤에 보이도록
-                        st.write("")  # 약간의 위 여백
-                        if st.button("삭제", key=f"del_{i}"):
-                            st.session_state.properties.pop(i)
-                            st.rerun()
-
-                    # 카드 div 닫기
-                    st.markdown("</div>", unsafe_allow_html=True)
-                    
         # 2-4. 라이프스타일
         with st.expander("4. 라이프스타일 (Lifestyle)", expanded=False):
             monthly_spend = st.number_input("은퇴 월 생활비(만원)", 0, 5000, 300)
