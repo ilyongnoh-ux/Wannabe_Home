@@ -98,8 +98,14 @@ def app(input_col):
     #    cost = st.select_slider("회당 비용 (그늘집 포함)", options=[20, 30, 35, 40, 50, 70], value=35) * 10000
         
         st.divider()
-        
-        st.subheader("💰 자산 현황")
+        st.markdown(
+            """
+            <h3 style="text-align:center; margin-bottom: 0.8rem;">
+                💰 자산 현황
+            </h3>
+            """,
+            unsafe_allow_html=True,
+        )
         assets = st.slider("현재 골프 자금 (만원)", 0, 50000, 10000, step=1000) * 10000
         saving = st.slider("월 추가 저축액 (만원)", 0, 500, 0, step=10) * 10000
 
@@ -163,5 +169,6 @@ def app(input_col):
         result_msg=result_msg
 
     )
+
 
 
