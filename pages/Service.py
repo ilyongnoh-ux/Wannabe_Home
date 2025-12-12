@@ -57,7 +57,7 @@ tool_map = {
 }
 
 # 3. 선택해야 할 인덱스 찾기 (오타나 엉뚱한 값이면 0번 골프)
-default_idx = tool_map.get(str(target_tool).lower(), 0)
+default_idx = tool_map.get(str(target_tool).lower(), 2)
 
 # ==============================================================================
 # 화면 분할 및 실행
@@ -93,6 +93,7 @@ with right_col:
         Wannabe_Life_Plan.app(left_col)
 
 show_footer()
+
 
 
 
