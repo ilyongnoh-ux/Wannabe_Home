@@ -84,7 +84,7 @@ with left_col:
     
     st.markdown("<hr style='margin: 10px 0; border: 0; border-top: 1px solid #ddd;'>", unsafe_allow_html=True)
     
-    st.markdown("<h3 style='margin: 0 0 10px 0; font-size: 1.2rem;'>Solution Menu</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='margin: 0 0 10px 0; font-size: 1.8rem;'>Solution Menu</h3>", unsafe_allow_html=True)
     
     selected_app = st.selectbox(
         "솔루션 선택", 
@@ -101,5 +101,6 @@ with right_col:
         Wannabe_Tax.app(left_col)
     elif selected_app == "Wannabe Life Plan":
         Wannabe_Life_Plan.app(left_col)
+
 
 show_footer()
