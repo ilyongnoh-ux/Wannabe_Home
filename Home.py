@@ -61,14 +61,17 @@ with col_nav2:
     st.page_link("pages/Service.py", label="Service", use_container_width=True)
 
 # 메인 타이틀 영역
-# [수정 핵심] HTML 태그 앞의 들여쓰기(공백)를 모두 제거하여 왼쪽으로 붙였습니다.
+# [수정 핵심] <span> 태그와 display: inline-block을 사용하여 스마트한 줄바꿈 구현
 st.markdown(
     """
 <div style="text-align: center; margin-top: 150px; margin-bottom: 30px;">
-<h1 style="color: #FFFFFF; font-size: 4.8rem; font-family: 'Arial Black', sans-serif; text-shadow: 0px 4px 3px rgba(0,0,0,0.4), 0px 8px 13px rgba(0,0,0,0.1), 0px 18px 23px rgba(0,0,0,0.1), 0px 0px 30px rgba(0,0,0,0.9); font-weight: 900; margin-bottom: 15px; letter-spacing: -2px;">Bridge the Gap</h1>
+<h1 style="color: #FFFFFF; font-size: 6rem; font-family: 'Arial Black', sans-serif; text-shadow: 0px 4px 3px rgba(0,0,0,0.4), 0px 8px 13px rgba(0,0,0,0.1), 0px 18px 23px rgba(0,0,0,0.1), 0px 0px 30px rgba(0,0,0,0.9); font-weight: 900; margin-bottom: 15px; letter-spacing: -2px;">Bridge the Gap</h1>
 <div style="background: linear-gradient(to right, transparent, rgba(0,0,0,0.3), transparent); padding: 20px 0;">
-<h3 style="color: #FFFFFF; font-size: 1.6rem; text-shadow: 0px 2px 4px rgba(0,0,0,0.9), 0px 0px 20px rgba(0,0,0,0.8); font-weight: 700; margin-top: 0; margin-bottom: 10px;">가능성과 현실의 간극을 메우는,</h3>
-<h3 style="color: #FFFFFF; font-size: 2rem; text-shadow: 0px 2px 4px rgba(0,0,0,0.9), 0px 0px 20px rgba(0,0,0,0.8); font-weight: 700; margin-top: 0; letter-spacing: -1px;">당신의 평생 금융파트너,   한국금융투자기술(KFIT)®</h3>
+<h3 style="color: #FFFFFF; font-size: 2.2rem; text-shadow: 0px 2px 4px rgba(0,0,0,0.9), 0px 0px 20px rgba(0,0,0,0.8); font-weight: 700; margin-top: 0; margin-bottom: 10px; letter-spacing: -1px; word-break: keep-all;">가능성과 현실의 간극을 메우는,</h3>
+<h3 style="color: #FFFFFF; font-size: 2.4rem; text-shadow: 0px 2px 4px rgba(0,0,0,0.9), 0px 0px 20px rgba(0,0,0,0.8); font-weight: 800; margin-top: 0; word-break: keep-all;">
+<span style="display: inline-block;">당신의 평생 금융파트너,</span>
+<span style="display: inline-block;">한국금융투자기술(KFIT)®</span>
+</h3>
 </div>
 </div>
     """,
@@ -82,20 +85,4 @@ st.markdown(
 )
 
 # 항상 맨 마지막에 호출
-
 show_footer()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
