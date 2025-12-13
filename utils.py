@@ -60,7 +60,7 @@ def show_footer():
         }
         </style>
         <div class="kfit-footer">
-            Korea Financial Investment Technology(KFIT)®</b> | 010-6255-9978 <br> Copyright © 2025 WannabeDream® Solution. All rights reserved.
+            본 사이트의 모든 컨텐츠는 저작권법의 보호를 받으므로 무단 전재, 복사, 배포를 금합니다. <br> Copyright © 2025 Korea Financial Investment Technology(KFIT)® All rights reserved.
         </div>
         """,
         unsafe_allow_html=True,
