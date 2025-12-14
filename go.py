@@ -9,7 +9,6 @@ st.set_page_config(
 )
 
 # 2. HTML 및 CSS 코드를 Markdown으로 삽입
-# GA 트래킹 코드와 JavaScript 지연 리디렉션 코드를 포함합니다.
 html_code = """
 <html>
     <head>
@@ -27,30 +26,41 @@ html_code = """
         </script>
         
         <style>
-            /* 기본 설정 (라이트 모드 또는 설정 없음) */
-            body {
-                background-color: white; /* 흰색 배경 */
-                color: black;          /* 검정색 글씨 */
+            /* 1. Streamlit 앱 전체를 화면 중앙에 배치하기 위한 CSS */
+            .stApp {
                 display: flex;
-                justify-content: center;
-                align-items: center;
+                flex-direction: column;
+                justify-content: center; /* 수직 중앙 정렬 */
+                align-items: center;     /* 수평 중앙 정렬 */
                 height: 100vh; /* 전체 화면 높이 사용 */
                 margin: 0;
+            }
+
+            /* 2. body 기본 스타일 (Streamlit 컨테이너 내에서 작동) */
+            body {
+                background-color: white; 
+                color: black;          
                 font-family: sans-serif;
                 font-size: 1.2em;
             }
-            .stApp {
-                background-color: white !important; /* Streamlit 앱 배경도 흰색으로 강제 */
+            
+            /* 3. 텍스트 스타일 */
+            p {
+                font-weight: 600;
+                text-align: center;
+                /* 텍스트가 중앙에 오도록 추가 마진 제거 */
+                margin: 0;
+                padding: 20px;
             }
 
             /* 사용자 시스템이 다크 모드일 때 (prefers-color-scheme: dark) */
             @media (prefers-color-scheme: dark) {
-                body {
-                    background-color: black; /* 검정색 배경 */
-                    color: white;          /* 흰색 글씨 */
+                .stApp, body {
+                    background-color: black !important; /* 검정색 배경 강제 */
+                    color: white !important;           /* 흰색 글씨 강제 */
                 }
-                .stApp {
-                    background-color: black !important; /* Streamlit 앱 배경도 검정색으로 강제 */
+                p {
+                    color: white !important; 
                 }
             }
         </style>
@@ -61,7 +71,7 @@ html_code = """
 </html>
 """
 
-# Streamlit에 HTML 코드 삽입 (페이지를 완전히 덮어씌웁니다)
+# Streamlit에 HTML 코드 삽입
 st.markdown(html_code, unsafe_allow_html=True)
 
 # Streamlit의 기본 요소가 표시되지 않도록 빈 컨테이너를 하나 더 추가
