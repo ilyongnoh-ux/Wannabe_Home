@@ -20,7 +20,7 @@ def get_base64_of_bin_file(bin_file):
         return None
 
 # 이미지 파일 로드
-image_filename = 'ci.png' 
+image_filename = 'pages/ci.png' 
 base64_image = get_base64_of_bin_file(image_filename)
 
 # 이미지가 없을 경우를 대비한 배경색 설정
