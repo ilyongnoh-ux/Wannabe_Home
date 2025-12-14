@@ -172,7 +172,7 @@ with c1:
     left, center, right = st.columns([1, 1, 2])
     with right:
         st.image(
-            "pages/ceo.jpg",  # 대표 사진 파일 경로
+            "ceo.jpg",  # 대표 사진 파일 경로
             caption=None,
             width=220,
         )
