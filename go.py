@@ -1,6 +1,20 @@
 import streamlit as st
+import base64
 
-# 1. 페이지 설정 (파비콘과 제목은 Streamlit 방식으로 설정)
+# --- 💡 1단계: Base64 인코딩 함수 (실제 파일 경로를 넣어 실행해야 합니다) ---
+def encode_image_to_base64(filepath):
+    """지정된 파일 경로의 이미지를 Base64 문자열로 인코딩합니다."""
+    try:
+        with open(filepath, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+        return f"data:image/png;base64,{encoded_string}"
+    except FileNotFoundError:
+        return ""
+
+# --- 2단계: 실제 Base64 문자열로 대체 (실제 파일 인코딩 후 사용) ---
+CI_BG_IMAGE = "YOUR_CI_PNG_BASE64_STRING" 
+
+# 1. 페이지 설정
 st.set_page_config(
     page_title="연결 중...",
     page_icon="🔗",
@@ -9,60 +23,68 @@ st.set_page_config(
 )
 
 # 2. HTML 및 CSS 코드를 Markdown으로 삽입
-html_code = """
+html_code = f"""
 <html>
     <head>
         <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_MEASUREMENT_ID"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
+          function gtag(){{dataLayer.push(arguments);}}
           gtag('js', new Date());
           gtag('config', 'YOUR_GA_MEASUREMENT_ID');
         </script>
         <script>
-            setTimeout(function() {
+            setTimeout(function() {{
                 window.location.href = 'https://kfit.kr'; // 5000ms (5초) 후 리디렉션
-            }, 5000); 
+            }}, 5000); 
         </script>
         
         <style>
-            /* 1. Streamlit 앱 전체를 화면 중앙에 배치하기 위한 CSS */
-            .stApp {
+            .stApp {{
+                background-image: url('{CI_BG_IMAGE}');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-attachment: fixed;
+                
                 display: flex;
                 flex-direction: column;
-                justify-content: center; /* 수직 중앙 정렬 */
-                align-items: center;     /* 수평 중앙 정렬 */
-                height: 100vh; /* 전체 화면 높이 사용 */
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
                 margin: 0;
-            }
+            }}
 
-            /* 2. body 기본 스타일 (Streamlit 컨테이너 내에서 작동) */
-            body {
-                background-color: white; 
+            body {{
+                background-color: transparent; 
                 color: black;          
                 font-family: sans-serif;
                 font-size: 1.2em;
-            }
+            }}
             
-            /* 3. 텍스트 스타일 */
-            p {
-                font-weight: 600;
+            p {{
+                font-weight: 800;
                 text-align: center;
-                /* 텍스트가 중앙에 오도록 추가 마진 제거 */
                 margin: 0;
                 padding: 20px;
-            }
+                background-color: rgba(255, 255, 255, 0.8); 
+                border-radius: 5px;
+            }}
 
-            /* 사용자 시스템이 다크 모드일 때 (prefers-color-scheme: dark) */
-            @media (prefers-color-scheme: dark) {
-                .stApp, body {
-                    background-color: black !important; /* 검정색 배경 강제 */
-                    color: white !important;           /* 흰색 글씨 강제 */
-                }
-                p {
+            @media (prefers-color-scheme: dark) {{
+                .stApp {{
+                    background-image: none !important;
+                    background-color: black !important; 
+                }}
+                body {{
+                    background-color: transparent !important;
+                    color: white !important;
+                }}
+                p {{
                     color: white !important; 
-                }
-            }
+                    background-color: rgba(0, 0, 0, 0.8);
+                }}
+            }}
         </style>
     </head>
     <body>
