@@ -9,10 +9,17 @@ st.set_page_config(
 )
 
 # 2. HTML 및 CSS 코드를 Markdown으로 삽입
-# 리디렉션 메타 태그와 다크 모드 감지 CSS를 포함합니다.
+# 리디렉션 메타 태그와 다크 모드 감지 CSS, 그리고 GA 추적 코드를 포함합니다.
 html_code = """
 <html>
     <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_MEASUREMENT_ID"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'YOUR_GA_MEASUREMENT_ID');
+        </script>
         <meta http-equiv="refresh" content="5;url=https://kfit.kr">
         
         <style>
