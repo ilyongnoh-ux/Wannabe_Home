@@ -1,18 +1,17 @@
 import streamlit as st
 import base64
-import os
+import time
 
-# 1. 페이지 설정
+# 1. 페이지 설정 (최대한 빨리 로드되도록 맨 위에 배치)
 st.set_page_config(
     page_title="연결 중...",
     page_icon="🔗",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="collapsed"
 )
 
 # --- 💡 이미지 자동 로드 함수 ---
 def get_base64_of_bin_file(bin_file):
-    """png 파일을 찾아서 Base64로 즉시 변환해주는 함수"""
     try:
         with open(bin_file, 'rb') as f:
             data = f.read()
@@ -20,28 +19,14 @@ def get_base64_of_bin_file(bin_file):
     except FileNotFoundError:
         return None
 
-# [중요] 여기에 사용할 이미지 파일명을 정확히 적어주세요.
-# 파일이 같은 폴더에 있어야 합니다.
+# 이미지 파일 로드
 image_filename = 'ci.png' 
 base64_image = get_base64_of_bin_file(image_filename)
 
-# 이미지를 못 찾았을 경우 경고 표시 (디버깅용)
-if base64_image is None:
-    st.error(f"⚠️ '{image_filename}' 파일을 찾을 수 없습니다. 같은 폴더에 이미지가 있는지 확인해주세요!")
-    bg_style = "" # 이미지가 없으면 배경 스타일 적용 안 함
-else:
-    # 이미지가 있으면 CSS 생성
-    bg_style = f"""
-    .stApp {{
-        background-image: url("data:image/png;base64,{base64_image}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-attachment: fixed;
-    }}
-    """
+# 이미지가 없을 경우를 대비한 배경색 설정
+bg_css_line = f'background-image: url("data:image/png;base64,{base64_image}");' if base64_image else 'background-color: white;'
 
-# 2. HTML/CSS/JS 코드
+# 2. HTML/CSS/JS 코드 (강력한 덮어쓰기 적용)
 html_code = f"""
 <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_MEASUREMENT_ID"></script>
 <script>
@@ -52,52 +37,83 @@ html_code = f"""
 </script>
 
 <script>
+    // 5초 후 리디렉션
     setTimeout(function() {{
         window.location.href = 'https://kfit.kr'; 
     }}, 5000); 
 </script>
 
 <style>
-/* 1. 배경 이미지 스타일 적용 */
-{bg_style}
-
-/* 2. 컨텐츠 정렬 */
-.stApp {{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}}
-
-/* 3. 텍스트 박스 스타일 */
-.loading-text {{
-    font-family: sans-serif;
-    font-size: 1.2em;
-    font-weight: 800;
-    text-align: center;
-    margin: 0;
-    padding: 30px 50px;
-    background-color: rgba(255, 255, 255, 0.9); 
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    color: black;
-    z-index: 999; /* 배경 위에 글씨가 오도록 설정 */
-}}
-
-/* 다크 모드에서도 이미지가 보이도록 강제 (배경 숨김 코드 삭제함) */
-@media (prefers-color-scheme: dark) {{
-    .loading-text {{
-        background-color: rgba(30, 30, 30, 0.9);
-        color: white;
+    /* [핵심 1] Streamlit의 기본 헤더와 사이드바, 푸터 강제 숨김 */
+    header[data-testid="stHeader"] {{
+        display: none !important;
     }}
-}}
+    div[data-testid="stSidebar"] {{
+        display: none !important;
+    }}
+    footer {{
+        display: none !important;
+    }}
+
+    /* [핵심 2] 로딩 화면을 전체 화면 덮어쓰기(Overlay)로 설정 */
+    .loading-overlay {{
+        position: fixed;        /* 화면에 고정 */
+        top: 0;
+        left: 0;
+        width: 100vw;           /* 너비 100% */
+        height: 100vh;          /* 높이 100% */
+        z-index: 999999;        /* [중요] 모든 요소보다 맨 위에 배치 */
+        
+        /* 배경 설정 */
+        {bg_css_line}
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        
+        /* 내용 정렬 */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }}
+
+    /* 텍스트 박스 스타일 */
+    .loading-text {{
+        font-family: 'Pretendard', sans-serif; /* 폰트가 없다면 기본 sans-serif */
+        font-size: 1.5em;
+        font-weight: 800;
+        text-align: center;
+        margin: 0;
+        padding: 40px 60px;
+        
+        background-color: rgba(255, 255, 255, 0.95); 
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        color: #333;
+        line-height: 1.6;
+    }}
+
+    /* 다크 모드 대응 */
+    @media (prefers-color-scheme: dark) {{
+        .loading-overlay {{
+            background-image: none !important; /* 다크모드에선 배경 이미지 제거 원하시면 유지 */
+            background-color: #111 !important;
+        }}
+        .loading-text {{
+            background-color: rgba(30, 30, 30, 0.9);
+            color: white;
+            box-shadow: 0 10px 25px rgba(255,255,255,0.1);
+        }}
+    }}
 </style>
 
-<div class="loading-text">
-    한국금융투자기술 서비스 페이지로<br>연결 중입니다...
+<div class="loading-overlay">
+    <div class="loading-text">
+        한국금융투자기술<br>
+        서비스 페이지로 이동 중입니다...
+    </div>
 </div>
 """
 
 # 3. 실행
 st.markdown(html_code, unsafe_allow_html=True)
-st.empty()
