@@ -1,9 +1,25 @@
 import streamlit as st
+import base64
+from io import BytesIO
 from utils import set_bg_hack, show_footer, hide_header
 
+# 1. Base64 인코딩 함수 정의
+def png_to_base64(filepath):
+    # 파일을 바이너리 읽기 모드(rb)로 열고 Base64 인코딩
+    with open(filepath, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode()
+    
+    # Data URI 형식으로 반환 (image/png 타입 명시)
+    return f"data:image/png;base64,{encoded_string}"
+
+# 2. 아이콘 설정
+# (예시: logo.png 파일이 프로젝트 루트에 있다고 가정)
+icon_data_uri = png_to_base64("logo.png")
+
+# 3. set_page_config에 적용
 st.set_page_config(
     page_title="한국금융투자기술",
-    page_icon="💼",
+    page_icon=icon_data_uri, # Data URI 적용
     layout="wide",
     initial_sidebar_state="collapsed",
 )
