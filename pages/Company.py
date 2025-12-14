@@ -21,7 +21,7 @@ st.markdown(
 st.markdown(
     """
     <style>
-    /* ✅ 전체 배경을 항상 흰색으로 고정 (다크모드에서도) */
+    /* 전체 배경을 항상 흰색으로 고정 (다크모드에서도) */
     .stApp {
         background-color: #ffffff !important;
         background-image: none !important;
@@ -94,17 +94,59 @@ st.markdown(
         text-align: left !important;
         margin-left: -25px !important; /* 강제 밀착 */
     }
+    
+    /* CEO 섹션 카드 스타일 */
+    .ceo-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f9fafb 55%, #eff6ff 100%);
+        border-radius: 24px;
+        padding: 2.5rem 3rem;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        margin-top: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+    .ceo-name {
+        font-weight: 700;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+        color: #111827;
+    }
+    .ceo-title {
+        font-size: 0.85rem;
+        color: #6B7280;
+    }
+
+    /* Mission 영역 스타일 */
+    .mission-wrap {
+        text-align: center;
+        margin: 3rem 0 2.5rem 0;
+    }
+    .mission-label {
+        font-size: 0.9rem;
+        letter-spacing: 0.25em;
+        color: #6B7280;
+        text-transform: uppercase;
+        margin-bottom: 0.3rem;
+    }
+    .mission-text {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #111827;
+    }
+    .mission-sub {
+        font-size: 0.95rem;
+        color: #6B7280;
+        margin-top: 0.4rem;
+    }
+
     </style>
     """,
     unsafe_allow_html=True,
 )
 
 # 상단 네비게이션 (좌측 정렬 + 초밀착)
-# 비율을 [0.7, 0.15, 0.7, 10] 로 조정하고 gap="small" 옵션을 추가
 col_nav1, col_sep, col_nav2, col_empty = st.columns([0.7, 0.15, 0.7, 10], gap="small") 
 
 with col_nav1:
-    # "Home"을 "Company"로 변경하고 Home.py로 링크 유지
     st.page_link("Home.py", label="Home", use_container_width=True) 
 
 with col_sep:
@@ -176,8 +218,6 @@ with c2:
         """,
         unsafe_allow_html=True,
     )
-
-st.markdown("</div>", unsafe_allow_html=True)  # ceo-card 닫기
 
 # =======================
 # Mission 영역 (하단 중앙 크게)
