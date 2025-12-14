@@ -1,7 +1,9 @@
 import streamlit as st
-from utils import show_footer, hide_header
+from utils import show_footer, hide_header, set_global_page_config
 
-st.set_page_config(page_title="Company - Kfit", page_icon="🏢", layout="wide")
+#st.set_page_config(page_title="Company - Kfit", page_icon="🏢", layout="wide")
+
+set_global_page_config()
 
 hide_header()
 

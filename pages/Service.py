@@ -1,8 +1,8 @@
 import streamlit as st
-from utils import show_footer, hide_header
+from utils import show_footer, hide_header, set_global_page_config
 from apps import Wannabe_Golf, Wannabe_Tax, Wannabe_Life_Plan
 
-st.set_page_config(page_title="Services - Kfit", page_icon="🚀", layout="wide")
+set_global_page_config()
 
 hide_header()
 
