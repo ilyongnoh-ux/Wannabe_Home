@@ -33,20 +33,23 @@ st.markdown(
         color: #111827 !important;
     }
 
-    /* 네비게이션 스타일 */
+    /* 네비게이션 링크 컨테이너 기본 스타일 */
     [data-testid="stPageLink-NavLink"] {
         background-color: transparent !important;
         border: none !important;
         box-shadow: none !important;
-        padding: 0px 10px !important;
+        padding: 0px !important; /* 패딩 제거 */
         margin: 0 !important;
+        width: auto !important;
     }
     [data-testid="stPageLink-NavLink"] p {
         color: #555555 !important;
         font-size: 1.3rem !important;
         font-weight: 600 !important;
         margin: 0 !important;
-        padding: 5px 10px !important;
+        padding: 5px 0px !important; /* 수평 패딩 제거 */
+        line-height: 1.0; 
+        white-space: nowrap;
     }
     [data-testid="stPageLink-NavLink"]:hover p {
         color: #1E3A8A !important;
@@ -55,57 +58,58 @@ st.markdown(
         transition: all 0.2s ease-in-out;
     }
 
-    /* CEO 섹션 카드 스타일 */
-    .ceo-card {
-        background: linear-gradient(135deg, #ffffff 0%, #f9fafb 55%, #eff6ff 100%);
-        border-radius: 24px;
-        padding: 2.5rem 3rem;
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
-        margin-top: 1.5rem;
-        margin-bottom: 2.5rem;
-    }
-    .ceo-name {
-        font-weight: 700;
-        font-size: 1rem;
-        margin-top: 0.5rem;
-        color: #111827;
-    }
-    .ceo-title {
-        font-size: 0.85rem;
-        color: #6B7280;
+    /* 구분선(|) 스타일 */
+    .nav-separator {
+        color: #555555; /* 텍스트 색상과 통일 */
+        font-size: 1.3rem;
+        font-weight: 300; 
+        text-align: center;
+        margin-top: 0px; 
+        opacity: 1.0;
+        line-height: 1.0;
     }
 
-    /* Mission 영역 스타일 */
-    .mission-wrap {
-        text-align: center;
-        margin: 3rem 0 2.5rem 0;
+    /* [핵심] 네비게이션 강제 밀착 (Magnetic Layout) */
+    
+    /* 1번 컬럼 (Company): 오른쪽 정렬 + 오른쪽으로 25px 더 밈 */
+    div[data-testid="column"]:nth-of-type(1) [data-testid="stPageLink-NavLink"] {
+        justify-content: flex-end !important;
+        text-align: right !important;
+        margin-right: -25px !important; /* 강제 밀착 */
     }
-    .mission-label {
-        font-size: 0.9rem;
-        letter-spacing: 0.25em;
-        color: #6B7280;
-        text-transform: uppercase;
-        margin-bottom: 0.3rem;
+
+    /* 2번 컬럼 (|): 중앙 정렬 + 공간 최소화 */
+    div[data-testid="column"]:nth-of-type(2) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 !important;
+        min-width: 0px !important;
+        max-width: 20px !important;
     }
-    .mission-text {
-        font-size: 2rem;
-        font-weight: 800;
-        color: #111827;
-    }
-    .mission-sub {
-        font-size: 0.95rem;
-        color: #6B7280;
-        margin-top: 0.4rem;
+
+    /* 3번 컬럼 (Service): 왼쪽 정렬 + 왼쪽으로 25px 더 당김 */
+    div[data-testid="column"]:nth-of-type(3) [data-testid="stPageLink-NavLink"] {
+        justify-content: flex-start !important;
+        text-align: left !important;
+        margin-left: -25px !important; /* 강제 밀착 */
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# 상단 네비게이션
-col_nav1, col_nav2, col_empty = st.columns([0.2, 0.2, 0.6])
+# 상단 네비게이션 (좌측 정렬 + 초밀착)
+# 비율을 [0.7, 0.15, 0.7, 10] 로 조정하고 gap="small" 옵션을 추가
+col_nav1, col_sep, col_nav2, col_empty = st.columns([0.7, 0.15, 0.7, 10], gap="small") 
+
 with col_nav1:
-    st.page_link("Home.py", label="Home", use_container_width=True)
+    # "Home"을 "Company"로 변경하고 Home.py로 링크 유지
+    st.page_link("Home.py", label="Home", use_container_width=True) 
+
+with col_sep:
+    st.markdown('<div class="nav-separator">|</div>', unsafe_allow_html=True)
+
 with col_nav2:
     st.page_link("pages/Service.py", label="Service", use_container_width=True)
 
@@ -158,16 +162,13 @@ with c2:
 
 저와 한국금융투자기술이 집중하는 일은 세 가지입니다.  
 
-1. **은퇴·연금 전략**  
-   국민연금·퇴직연금·개인연금을 한 번에 설계해  
+1. **은퇴·연금 전략** 국민연금·퇴직연금·개인연금을 한 번에 설계해  
    은퇴 이후의 **월 현금 흐름**을 구체적으로 만들어 갑니다.
 
-2. **위험 관리 & 보험 리모델링**  
-   과보장은 줄이고, 꼭 필요한 보장은 채워  
+2. **위험 관리 & 보험 리모델링** 과보장은 줄이고, 꼭 필요한 보장은 채워  
    **가계 지출과 보장 구조를 동시에 정리**합니다.
 
-3. **기업·대표 재무 컨설팅**  
-   소득·세금·건보료·법인 자금을 함께 바라보며  
+3. **기업·대표 재무 컨설팅** 소득·세금·건보료·법인 자금을 함께 바라보며  
    대표와 기업 모두에게 유리한 **입체적인 재무 구조**를 설계합니다.
 
 한 번의 계약으로 끝나는 관계가 아니라,  
@@ -197,15 +198,3 @@ st.markdown(
 )
 
 show_footer()
- 
-
-
-
-
-
-
-
-
-
-
-

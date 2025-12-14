@@ -30,7 +30,9 @@ st.markdown("""
     [data-testid="stPageLink-NavLink"] { 
         border: none !important; 
         background: transparent !important; 
-        padding: 0px !important; 
+        padding: 0px !important; /* 전체 패딩 제거 */
+        margin: 0 !important; /* 마진 제거 */
+        width: auto !important;
     }
 
     /* 기본 상태 */
@@ -38,22 +40,81 @@ st.markdown("""
         font-size: 1.2rem;            
         font-weight: 600; 
         color: var(--text-color); 
-        padding: 4px 6px;             
+        padding: 5px 0px !important; /* 상하 패딩 유지, 좌우 패딩 제거 */
         margin: 0; 
         transition: all 0.15s ease-in-out; 
+        line-height: 1.0; 
+        white-space: nowrap; /* 글자 줄바꿈 방지 */
     }
 
     /* 호버 상태 */
     [data-testid="stPageLink-NavLink"]:hover p { 
         color: var(--primary-color) !important; 
         font-weight: 900 !important; 
-        font-size: 1.2rem;            
+        transform: scale(1.05);            
+    }
+    
+    /* 3. 구분선(|) 스타일 재추가 */
+    .nav-separator {
+        color: var(--text-color); /* Streamlit 기본 텍스트 색상 사용 */
+        font-size: 1.2rem;
+        font-weight: 300; 
+        text-align: center;
+        margin-top: 0px; /* 높이 미세 조정 */
+        opacity: 1.0;
+        line-height: 1.0;
+        width: 10px; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* [핵심 재추가] 네비게이션 강제 밀착 (Magnetic Layout - Full Width) */
+    
+    /* 1번 컬럼 (Home): 오른쪽 정렬 + 오른쪽으로 15px 더 밈 (글자 잘림 방지 위한 안전 마진) */
+    div[data-testid="column"]:nth-of-type(1) [data-testid="stPageLink-NavLink"] {
+        justify-content: flex-end !important;
+        text-align: right !important;
+        margin-right: -25px !important; 
+    }
+
+    /* 2번 컬럼 (|): 중앙 정렬 + 공간 최소화 */
+    div[data-testid="column"]:nth-of-type(2) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 !important;
+        min-width: 0px !important;
+        max-width: 0px !important;
+    }
+
+    /* 3번 컬럼 (Company): 왼쪽 정렬 + 왼쪽으로 15px 더 당김 (글자 잘림 방지 위한 안전 마진) */
+    div[data-testid="column"]:nth-of-type(3) [data-testid="stPageLink-NavLink"] {
+        justify-content: flex-start !important;
+        text-align: left !important;
+        margin-left: -25px !important; 
     }
 
     /* 상단 여백 조정 */
     .block-container { padding-top: 1rem !important; }
     </style>
 """, unsafe_allow_html=True)
+
+# ==============================================================================
+# [수정 시작] 네비게이션을 페이지 최상단으로 이동 (Home | Company)
+# ==============================================================================
+# 구조: [Home] [|] [Company] [나머지 여백]
+col_nav1, col_sep, col_nav2, _ = st.columns([0.7, 0.15, 0.7, 10], gap="small") 
+
+with col_nav1: 
+    st.page_link("Home.py", label="Home", use_container_width=True)
+
+with col_sep:
+    st.markdown('<div class="nav-separator">|</div>', unsafe_allow_html=True)
+
+with col_nav2: 
+    st.page_link("pages/Company.py", label="Company", use_container_width=True)
+
+# [수정 끝]
 
 
 # ==============================================================================
@@ -78,11 +139,13 @@ left_col, right_col = st.columns([3, 7], gap="medium")
 
 with left_col:
     st.write("") 
-    c1, c2 = st.columns(2)
-    with c1: st.page_link("Home.py", label="Home", use_container_width=True)
-    with c2: st.page_link("pages/Company.py", label="Company", use_container_width=True)
     
-    st.markdown("<hr style='margin: 10px 0; border: 0; border-top: 1px solid #ddd;'>", unsafe_allow_html=True)
+    # [제거] 기존 좌측 프레임 메뉴 코드를 삭제
+    # c1, c2 = st.columns(2)
+    # with c1: st.page_link("Home.py", label="Home", use_container_width=True)
+    # with c2: st.page_link("pages/Company.py", label="Company", use_container_width=True)
+    
+    # st.markdown("<hr style='margin: 10px 0; border: 0; border-top: 1px solid #ddd;'>", unsafe_allow_html=True) // 상단에 이미 구분선 추가됨
     
     st.markdown("<h3 style='margin: 0 0 10px 0; font-size: 1.8rem;'>Solution Menu</h3>", unsafe_allow_html=True)
     
