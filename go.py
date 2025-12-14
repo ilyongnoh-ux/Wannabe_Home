@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # 2. HTML 및 CSS 코드를 Markdown으로 삽입
-# 리디렉션 메타 태그와 다크 모드 감지 CSS, 그리고 GA 추적 코드를 포함합니다.
+# GA 트래킹 코드와 JavaScript 지연 리디렉션 코드를 포함합니다.
 html_code = """
 <html>
     <head>
@@ -20,7 +20,11 @@ html_code = """
           gtag('js', new Date());
           gtag('config', 'YOUR_GA_MEASUREMENT_ID');
         </script>
-        <meta http-equiv="refresh" content="5;url=https://kfit.kr">
+        <script>
+            setTimeout(function() {
+                window.location.href = 'https://kfit.kr'; // 5000ms (5초) 후 리디렉션
+            }, 5000); 
+        </script>
         
         <style>
             /* 기본 설정 (라이트 모드 또는 설정 없음) */
@@ -34,7 +38,6 @@ html_code = """
                 margin: 0;
                 font-family: sans-serif;
                 font-size: 1.2em;
-                /* Streamlit의 기본 패딩/마진을 무시하고 전체 페이지를 차지하도록 설정 */
             }
             .stApp {
                 background-color: white !important; /* Streamlit 앱 배경도 흰색으로 강제 */
