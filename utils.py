@@ -2,9 +2,51 @@ import streamlit as st
 import base64
 import requests
 import json
+import os
 
 # [필수] 구글 앱스 스크립트(GAS) 배포 URL
 GAS_URL = "https://script.google.com/macros/s/AKfycbwF9R_qvwl1yhXaXsohYnTOBx1NR0s8tDNfzXL3jy8_WJm96RSiMBxS4tYFQAULSexu/exec"
+
+def _get_base64_image(file_path):
+    """(내부용) 이미지를 Base64로 변환하는 함수"""
+    try:
+        # 파일이 실제로 존재하는지 확인
+        if not os.path.exists(file_path):
+            # 파일이 없으면 경고 후 종료 (또는 기본 아이콘 사용 로직 추가 가능)
+            print(f"⚠️ 경고: '{file_path}' 파일을 찾을 수 없습니다.")
+            return None
+            
+        with open(file_path, "rb") as f:
+            data = f.read()
+        encoded_string = base64.b64encode(data).decode()
+        return f"data:image/png;base64,{encoded_string}"
+    except Exception as e:
+        print(f"이미지 변환 중 오류 발생: {e}")
+        return None
+
+def set_global_page_config(page_title="한국금융투자기술", icon_path="logo.png"):
+    """
+    모든 페이지에서 공통으로 사용할 페이지 설정 함수
+    :param page_title: 페이지 제목 (기본값 설정됨)
+    :param icon_path: 아이콘 파일 경로 (기본값: ci.png)
+    """
+    
+    # 1. 아이콘 이미지 로드 및 변환
+    icon_data = _get_base64_image(icon_path)
+    
+    # 이미지가 변환되지 않았으면(파일 없음 등) 기본 이모지 사용
+    final_icon = icon_data if icon_data else "💰" 
+
+    # 2. set_page_config 실행
+    st.set_page_config(
+        page_title=page_title,
+        page_icon=final_icon,
+        layout="wide",
+        initial_sidebar_state="collapsed"
+    )
+
+    # 3. (선택사항) 모든 페이지에 공통으로 적용할 CSS가 있다면 여기에 추가 가능
+    # st.markdown(...)
 
 def send_data_to_api(app_type, data_list):
     '''API 전송 함수'''
