@@ -247,39 +247,39 @@ def app(input_col):
                         st.rerun()
 
             # ▶ 자산 목록
-        if st.session_state.properties:
-            st.markdown("---")
-            st.markdown("**📋 등록된 자산 목록**")
-
-            for i, p in enumerate(st.session_state.properties):
-                # 텍스트 구성
-                desc = "상속" if "상속" in p["strategy"] else f"매각 ({p['sell_age']}세)"
-                css_class = "prop-card-sell" if "매각" in p["strategy"] else "prop-card-inherit"
-                icon = "💰" if "매각" in p["strategy"] else "🎁"
-                net = p["current_val"] - p["loan"]
-
-                # 한 줄에: [카드 전체 텍스트] | [삭제 버튼]
-                col_info, col_btn = st.columns([9, 1])
-
-                # 왼쪽: 색깔 카드 + 한 줄 요약
-                with col_info:
-                    st.markdown(
-                        f"""
-                        <div class="{css_class}">
-                            <div class="prop-title">{icon} {p['name']}</div>
-                            <div>순자산가치 {net}억 (대출 {p['loan']}억) {desc}</div>
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
-
-                # 오른쪽: 삭제 버튼만
-                with col_btn:
-                    st.write("")  # 살짝 위 여백
-                    if st.button("X", key=f"del_{i}"):
-                        st.session_state.properties.pop(i)
-                        st.rerun()
-
+                    if st.session_state.properties:
+                        st.markdown("---")
+                        st.markdown("**📋 등록된 자산 목록**")
+            
+                        for i, p in enumerate(st.session_state.properties):
+                            # 텍스트 구성
+                            desc = "상속" if "상속" in p["strategy"] else f"매각 ({p['sell_age']}세)"
+                            css_class = "prop-card-sell" if "매각" in p["strategy"] else "prop-card-inherit"
+                            icon = "💰" if "매각" in p["strategy"] else "🎁"
+                            net = p["current_val"] - p["loan"]
+            
+                            # 한 줄에: [카드 전체 텍스트] | [삭제 버튼]
+                            col_info, col_btn = st.columns([9, 1])
+            
+                            # 왼쪽: 색깔 카드 + 한 줄 요약
+                            with col_info:
+                                st.markdown(
+                                    f"""
+                                    <div class="{css_class}">
+                                        <div class="prop-title">{icon} {p['name']}</div>
+                                        <div>순자산가치 {net}억 (대출 {p['loan']}억) {desc}</div>
+                                    </div>
+                                    """,
+                                    unsafe_allow_html=True,
+                                )
+            
+                            # 오른쪽: 삭제 버튼만
+                            with col_btn:
+                                st.write("")  # 살짝 위 여백
+                                if st.button("X", key=f"del_{i}"):
+                                    st.session_state.properties.pop(i)
+                                    st.rerun()
+            
         # 2-4. 라이프스타일
         with st.expander("4. 라이프스타일 (Lifestyle)", expanded=False):
             monthly_spend = st.number_input("은퇴 월 생활비(만원)", 0, 5000, 300)
@@ -575,4 +575,5 @@ def app(input_col):
         app_type="life",
         DataModelClass=LifeData,
         **simulation_data
+
     )
