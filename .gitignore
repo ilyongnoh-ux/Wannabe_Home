@@ -2,3 +2,18 @@
 *.key
 *.crt
 .env
+# ---- Python cache ----
+__pycache__/
+*.pyc
+*.pyo
+
+# ---- Virtualenv ----
+.venv/
+api/.venv/
+
+# ---- Local data / sqlite ----
+data/
+api/data/
+*.db
+*.sqlite
+*.sqlite3
