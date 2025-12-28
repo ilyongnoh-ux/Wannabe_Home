@@ -7,46 +7,43 @@ from passlib.context import CryptContext
 import sqlite3
 import os
 from pathlib import Path
-import sqlite3
 
 # ============================================================
-# KFITER MVP - Auth Minimal (Register/Login/JWT/Me)
-# - 목적: 결제/라이선스의 전 단계인 "계정 기반 인증"을 먼저 안정화
-# - 특허 관점 메모:
-#   1) 계정(사용자) 식별 + 토큰 기반 세션
-#   2) 이후 "PC 기기지문/라이선스 서명"과 결합하여 인증 체계를 확장 가능
-#   3) 서버 책임 최소화(토큰 발급/검증), 민감키는 서버에만 존재
+# KFITER - Auth Core (Register/Login/JWT/Me)
+# ------------------------------------------------------------
+# 특허 관점 설계 메모:
+# 1) 사용자 계정 식별 + 토큰 기반 인증
+# 2) 추후 PC 기기지문 / 라이선스 서명과 결합 가능
+# 3) 서버는 인증 최소 책임만 수행 (Hash/JWT)
 # ============================================================
 
 app = FastAPI(title="KFIT API", version="0.1")
 
 # ---------------------------
-# 환경설정(운영시 .env로 분리 권장)
+# 환경설정
 # ---------------------------
 SECRET_KEY = os.getenv("KFIT_SECRET_KEY", "CHANGE_ME_IN_ENV")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24시간
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent   # .../kfit
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = Path(os.getenv("KFIT_DATA_DIR", str(PROJECT_ROOT / "data")))
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 DB_PATH = DATA_DIR / "kfit.db"
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto"
+)
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 # ---------------------------
 # DB 유틸
 # ---------------------------
-BPROJECT_ROOT = Path(__file__).resolve().parent.parent   # .../kfit
-DATA_DIR = Path(os.getenv("KFIT_DATA_DIR", str(PROJECT_ROOT / "data")))
-DATA_DIR.mkdir(parents=True, exist_ok=True)
-
-DB_PATH = DATA_DIR / "kfit.db"
-
 def db_conn():
-    DATA_DIR.mkdir(parents=True, exist_ok=True)  # ★ 핵심: 폴더 자동 생성
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
     return conn
@@ -88,13 +85,26 @@ class TokenOut(BaseModel):
     token_type: str = "bearer"
 
 # ---------------------------
-# 비밀번호/토큰
+# 비밀번호 / 토큰 유틸
 # ---------------------------
+def _bcrypt_safe(plain: str) -> str:
+    """
+    bcrypt는 72 bytes 초과 시 오류 발생.
+    → UTF-8 bytes 기준으로 명시적 절단.
+    (특허 관점: 입력 정규화 단계)
+    """
+    raw = plain.encode("utf-8")
+    if len(raw) > 72:
+        raw = raw[:72]
+    return raw.decode("utf-8", errors="ignore")
+
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    safe = _bcrypt_safe(plain)
+    return pwd_context.verify(safe, hashed)
 
 def hash_password(plain: str) -> str:
-    return pwd_context.hash(plain)
+    safe = _bcrypt_safe(plain)
+    return pwd_context.hash(safe)
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     to_encode = data.copy()
@@ -102,6 +112,9 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
+# ---------------------------
+# 사용자 조회
+# ---------------------------
 def get_user_by_email(email: str):
     conn = db_conn()
     cur = conn.cursor()
@@ -145,16 +158,15 @@ def root():
 
 @app.post("/auth/register", response_model=UserOut)
 def register(payload: RegisterIn):
-    # 최소 보안: 비번 길이 제한(추후 정책 강화)
     if len(payload.password) < 8:
         raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
 
-    existing = get_user_by_email(payload.email)
-    if existing:
+    if get_user_by_email(payload.email):
         raise HTTPException(status_code=409, detail="Email already registered")
 
     conn = db_conn()
     cur = conn.cursor()
+
     pw_hash = hash_password(payload.password)
     created_at = datetime.utcnow().isoformat()
 
@@ -166,12 +178,15 @@ def register(payload: RegisterIn):
     user_id = cur.lastrowid
     conn.close()
 
-    return UserOut(id=user_id, email=payload.email, name=payload.name, created_at=created_at)
+    return UserOut(
+        id=user_id,
+        email=payload.email,
+        name=payload.name,
+        created_at=created_at
+    )
 
 @app.post("/auth/login", response_model=TokenOut)
 def login(form: OAuth2PasswordRequestForm = Depends()):
-    # OAuth2PasswordRequestForm은 form-data로 username/password 받음
-    # 여기서는 username을 email로 사용
     user = get_user_by_email(form.username)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
