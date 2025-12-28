@@ -205,9 +205,13 @@ def app(input_col):
             return_rate = return_rate_int / 100
 
         # 2-3. 부동산 자산
-        with st.expander("3. 부동산 자산 (Real Estate)", expanded=False): 
+        with st.expander("3. 부동산 자산 (Real Estate)", expanded=False):
 
             # ▶ 자산 입력 폼
+            # - Streamlit의 st.form은 submit 시점에만 값이 확정되며,
+            #   submit 이후 st.rerun()이 호출되면 화면이 다시 그려집니다.
+            # - 따라서 "등록된 자산 목록"은 submit 여부와 무관하게 항상 렌더링되도록
+            #   form 바깥(=expander 영역)에 배치해야 합니다. (특허 명세서 대비: UI/상태 일관성 핵심)
             with st.form("prop_form", clear_on_submit=True):
                 r1_c1, r1_c2 = st.columns(2)
                 p_name = r1_c1.text_input("자산명", placeholder="예: 아파트")
@@ -226,16 +230,19 @@ def app(input_col):
                 with b2:
                     btn_submitted = st.form_submit_button("➕ 자산 추가", use_container_width=True)
 
-                # ✅ 버튼 아래에 에러 메시지 위치
+                # ✅ 버튼 아래에 에러 메시지 위치 (form 내부: UX 일관성)
                 warning_placeholder = st.empty()
 
                 if btn_submitted:
+                    # 입력 검증: 자산명이 비어 있으면 저장하지 않음
                     if not p_name or p_name.strip() == "":
                         warning_placeholder.error("⚠️ 자산명칭을 입력해주세요.")
                     else:
                         strat_code = "매각 (Sell)" if "매각" in p_strat else "상속 (Inherit)"
+
+                        # 상태 저장: session_state.properties에 누적 (앱 전체에서 동일 참조)
                         st.session_state.properties.append({
-                            "name": p_name,
+                            "name": p_name.strip(),
                             "current_val": p_curr,
                             "loan": p_loan,
                             "purchase_price": p_buy,
@@ -243,43 +250,50 @@ def app(input_col):
                             "sell_age": p_sell,
                             "is_sold": False
                         })
+
+                        # 경고 제거 후 즉시 화면 갱신
                         warning_placeholder.empty()
                         st.rerun()
 
             # ▶ 자산 목록
-                    if st.session_state.properties:
-                        st.markdown("---")
-                        st.markdown("**📋 등록된 자산 목록**")
-            
-                        for i, p in enumerate(st.session_state.properties):
-                            # 텍스트 구성
-                            desc = "상속" if "상속" in p["strategy"] else f"매각 ({p['sell_age']}세)"
-                            css_class = "prop-card-sell" if "매각" in p["strategy"] else "prop-card-inherit"
-                            icon = "💰" if "매각" in p["strategy"] else "🎁"
-                            net = p["current_val"] - p["loan"]
-            
-                            # 한 줄에: [카드 전체 텍스트] | [삭제 버튼]
-                            col_info, col_btn = st.columns([9, 1])
-            
-                            # 왼쪽: 색깔 카드 + 한 줄 요약
-                            with col_info:
-                                st.markdown(
-                                    f"""
-                                    <div class="{css_class}">
-                                        <div class="prop-title">{icon} {p['name']}</div>
-                                        <div>순자산가치 {net}억 (대출 {p['loan']}억) {desc}</div>
-                                    </div>
-                                    """,
-                                    unsafe_allow_html=True,
-                                )
-            
-                            # 오른쪽: 삭제 버튼만
-                            with col_btn:
-                                st.write("")  # 살짝 위 여백
-                                if st.button("X", key=f"del_{i}"):
-                                    st.session_state.properties.pop(i)
-                                    st.rerun()
-            
+            # - [버그 원인] 기존 코드는 자산 목록 렌더링 코드가 form submit 분기 안쪽에 잘못 들여쓰기 되어
+            #   '추가' 버튼을 눌렀을 때만 목록이 갱신/표시되는 구조였습니다.
+            # - 또한 submit 시 st.rerun()이 실행되면 그 아래 코드가 실행되지 않으므로,
+            #   목록이 화면에 나타나지 않는 증상이 반복될 수 있습니다.
+            # - [해결] 목록 렌더링을 form 바깥으로 이동하여, session_state의 현재 상태를 항상 반영합니다.
+            if st.session_state.properties:
+                st.markdown("---")
+                st.markdown("**📋 등록된 자산 목록**")
+
+                for i, p in enumerate(st.session_state.properties):
+                    # 텍스트 구성
+                    desc = "상속" if "상속" in p["strategy"] else f"매각 ({p['sell_age']}세)"
+                    css_class = "prop-card-sell" if "매각" in p["strategy"] else "prop-card-inherit"
+                    icon = "💰" if "매각" in p["strategy"] else "🎁"
+                    net = p["current_val"] - p["loan"]
+
+                    # 한 줄에: [카드 전체 텍스트] | [삭제 버튼]
+                    col_info, col_btn = st.columns([9, 1])
+
+                    # 왼쪽: 색깔 카드 + 한 줄 요약
+                    with col_info:
+                        st.markdown(
+                            f"""
+                            <div class="{css_class}">
+                                <div class="prop-title">{icon} {p['name']}</div>
+                                <div>순자산가치 {net}억 (대출 {p['loan']}억) {desc}</div>
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+
+                    # 오른쪽: 삭제 버튼만
+                    with col_btn:
+                        st.write("")  # 살짝 위 여백
+                        if st.button("X", key=f"del_{i}"):
+                            # 삭제 후 즉시 rerun하여 화면/상태 동기화
+                            st.session_state.properties.pop(i)
+                            st.rerun()
         # 2-4. 라이프스타일
         with st.expander("4. 라이프스타일 (Lifestyle)", expanded=False):
             monthly_spend = st.number_input("은퇴 월 생활비(만원)", 0, 5000, 300)
