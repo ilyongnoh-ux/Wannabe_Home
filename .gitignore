@@ -2,18 +2,25 @@
 *.key
 *.crt
 .env
-# ---- Python cache ----
+# ==========================
+# Python cache
+# ==========================
 __pycache__/
 *.pyc
 *.pyo
 
-# ---- Virtualenv ----
+# ==========================
+# Virtual environments
+# ==========================
 .venv/
 api/.venv/
 
-# ---- Local data / sqlite ----
+# ==========================
+# Local runtime data
+# ==========================
 data/
 api/data/
 *.db
 *.sqlite
 *.sqlite3
+
