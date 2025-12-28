@@ -1,26 +1,81 @@
+
+# ==========================
+
+# Secrets / keys
+
+# ==========================
+
 *.pem
+
 *.key
+
 *.crt
+
 .env
+
+
+
 # ==========================
+
 # Python cache
+
 # ==========================
+
 __pycache__/
+
 *.pyc
+
 *.pyo
 
-# ==========================
-# Virtual environments
-# ==========================
-.venv/
-api/.venv/
+*.pyd
+
+
 
 # ==========================
-# Local runtime data
+
+# Virtual environments
+
 # ==========================
+
+.venv/
+
+venv/
+
+**/.venv/
+
+**/venv/
+
+
+
+# ==========================
+
+# Local runtime data
+
+# ==========================
+
 data/
+
 api/data/
+
 *.db
+
 *.sqlite
+
 *.sqlite3
+
+
+
+# ==========================
+
+# OS / Editor
+
+# ==========================
+
+.DS_Store
+
+Thumbs.db
+
+.vscode/
+
+.idea/
 

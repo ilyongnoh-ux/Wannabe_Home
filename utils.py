@@ -178,3 +178,4 @@ def render_common_form(app_type, DataModelClass, **simulation_data):
                     st.error(f"데이터 처리 중 오류 발생: {str(e)}")
 
 
+API_BASE = "https://api.kfit.kr"
