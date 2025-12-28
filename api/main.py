@@ -6,6 +6,8 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 import sqlite3
 import os
+from pathlib import Path
+import sqlite3
 
 # ============================================================
 # KFITER MVP - Auth Minimal (Register/Login/JWT/Me)
@@ -25,7 +27,11 @@ SECRET_KEY = os.getenv("KFIT_SECRET_KEY", "CHANGE_ME_IN_ENV")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24시간
 
-DB_PATH = os.getenv("KFIT_DB_PATH", "/var/www/api/kfit.db")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent   # .../kfit
+DATA_DIR = Path(os.getenv("KFIT_DATA_DIR", str(PROJECT_ROOT / "data")))
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+DB_PATH = DATA_DIR / "kfit.db"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
@@ -33,8 +39,15 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 # ---------------------------
 # DB 유틸
 # ---------------------------
+BPROJECT_ROOT = Path(__file__).resolve().parent.parent   # .../kfit
+DATA_DIR = Path(os.getenv("KFIT_DATA_DIR", str(PROJECT_ROOT / "data")))
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+DB_PATH = DATA_DIR / "kfit.db"
+
 def db_conn():
-    conn = sqlite3.connect(DB_PATH)
+    DATA_DIR.mkdir(parents=True, exist_ok=True)  # ★ 핵심: 폴더 자동 생성
+    conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
     return conn
 
