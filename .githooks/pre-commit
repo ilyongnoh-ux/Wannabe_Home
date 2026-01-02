@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+set -e
+
+echo "[pre-commit] Running Web guard: API-only policy..."
+
+if [ ! -d "web" ]; then
+  echo "[pre-commit] Skip: ./web directory not found."
+  exit 0
+fi
+
+cd web
+npm run guard:web-api-only
+
+echo "[pre-commit] PASS"
