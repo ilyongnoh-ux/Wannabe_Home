@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    },
+
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+
+/*
+[수정 전/후 줄수]
+- 전: 34줄 내외(중복 compilerOptions로 실질 구조 오류)
+- 후: 35줄 내외(compilerOptions 단일화)
+
+[체크리스트]
+- ✅ compilerOptions 중복 제거
+- ✅ baseUrl/paths를 단일 compilerOptions로 통합
+- ✅ JSON 문법(콤마/중괄호) 정상화
+*/

@@ -1,0 +1,66 @@
+SSD 볼륨에 대한 폴더 경로의 목록입니다.
+볼륨 일련 번호는 3C20-14AB입니다.
+C:\DEV\KFIT\WEB\APP
+│  AuthStatus.tsx
+│  favicon.ico
+│  globals.css
+│  layout.tsx
+│  
+├─(app)
+│  │  layout.tsx
+│  │  
+│  ├─403
+│  │      page.tsx
+│  │      
+│  ├─admin
+│  │      page.tsx
+│  │      
+│  └─dashboard
+│          page.tsx
+│          
+├─(marketing)
+│  │  layout.tsx
+│  │  page.tsx
+│  │  
+│  ├─forgot-password
+│  │      page.tsx
+│  │      
+│  ├─login
+│  │      page.tsx
+│  │      
+│  ├─register
+│  │      page.tsx
+│  │      
+│  └─reset-password
+│          page.tsx
+│          
+├─api
+│  ├─auth
+│  │  │  route.ts
+│  │  │  
+│  │  ├─login
+│  │  │      route.ts
+│  │  │      
+│  │  ├─logout
+│  │  │      route.ts
+│  │  │      
+│  │  ├─password-reset
+│  │  │      route.ts
+│  │  │      
+│  │  ├─password-reset-request
+│  │  │      route.ts
+│  │  │      
+│  │  └─register
+│  │          route.ts
+│  │          
+│  └─me
+│          route.ts
+│          
+├─components
+│      AuthNav.tsx
+│      AuthStatus.tsx
+│      Header.tsx
+│      
+└─providers
+        AuthProvider.tsx
+        
